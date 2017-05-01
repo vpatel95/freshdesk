@@ -54,7 +54,7 @@ Route::prefix('api/android')->group(function(){
 	]);
 
 	Route::post('/event', [
-		'uses' => 'App\APIController',
+		'uses' => 'App\APIController@event',
 	]);
 
 });
