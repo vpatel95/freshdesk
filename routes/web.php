@@ -53,4 +53,8 @@ Route::prefix('api/android')->group(function(){
 		'uses' => 'App\LoginController@register'
 	]);
 
+	Route::post('/event', [
+		'uses' => 'App\APIController',
+	]);
+
 });
