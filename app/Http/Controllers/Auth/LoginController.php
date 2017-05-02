@@ -43,7 +43,7 @@ class LoginController extends Controller {
         $password = $request['password'];
 
         if(Auth::attempt(['email' => $email, 'password' => $password])) {
-            event(new HospitalEmergencyOthers(User::where('email',$email)->first(), "User Created", 511));
+            //event(new HospitalEmergencyOthers(User::where('email',$email)->first(), "User Created", 519));
             return redirect()->route('home');
         }
     }

@@ -65,30 +65,6 @@
 							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
 						</div>
 					</div>
-					<div class="panel panel-success dd_widget" id="dd_panel_03">
-						<div class="panel-heading">
-							<h4 class="panel-title">Lorem ipsum&hellip;</h4>
-						</div>
-						<div class="panel-body-narrow dd_content">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
-						</div>
-					</div>
-					<div class="panel panel-success dd_widget" id="dd_panel_03">
-						<div class="panel-heading">
-							<h4 class="panel-title">Lorem ipsum&hellip;</h4>
-						</div>
-						<div class="panel-body-narrow dd_content">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
-						</div>
-					</div>
-					<div class="panel panel-success dd_widget" id="dd_panel_03">
-						<div class="panel-heading">
-							<h4 class="panel-title">Lorem ipsum&hellip;</h4>
-						</div>
-						<div class="panel-body-narrow dd_content">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
-						</div>
-					</div>
 				</div>
 				<div class="col-sm-7 dd_column" id="dd_column_02">
 					<div class="row">
@@ -290,11 +266,28 @@
 
 @push('scripts')
 	<script src="{{ URL::to('js/lib/jquery_ui/jquery-ui-1.10.3.custom.min.js') }}"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCKmF_9vnsAGOsV21fibabqBhzYfbVrO6g"></script>
 
 	<script type="text/javascript">
-		Echo.private('emergencyOther.' + {{ $user->id }})
-		    .listen('HospitalEmergencyOthers', (e) => {
+		Echo.private('hospitalEmergencyAccident.' + {{ $user->id }})
+		    .listen('HospitalEmergencyAccident', (e) => {
 		        console.log(e);
+		        toastr["error"](e.ps_id, e.h_id);
+		        var geocoder;
+		        var latlng = {lat: parseFloat(e.lat), lng: parseFloat(e.lon)};
+		        geocoder = new google.maps.Geocoder();
+		        geocoder.geocode({'location': latlng}, function(results, status) {
+					    if (status === 'OK') {
+					        if (results[0]) {
+					        	var location = results[0].formatted_address;
+					        	alert(location);
+					    } else {
+					        window.alert('No results found');
+					    }
+					} else {
+				        window.alert('Geocoder failed due to: ' + status);
+				    }
+				});
 		    });
 	</script>
 @endpush

@@ -13,12 +13,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\UserLoggedIn' => [
-            'App\Listeners\NotifyUserLoggedIn',
+
+        'App\Events\HospitalEmergencyAccident' => [
+            'App\Listeners\NotifyHospitalEmergencyAccident',
         ],
 
-        'App\Events\HospitalEmergencyOthers' => [
-            'App\Listeners\NotifyHospitalEmergencyOthers',
+        'App\Events\AmbulanceRequested' => [
+            'App\Listeners\SendAmbulance',
         ],
 
         'App\Events\HospitalEmergencyPersonal' => [
@@ -29,12 +30,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyHospitalNearBy',
         ],
 
-        'App\Events\PoliceEmergencyOthers' => [
-            'App\Listeners\NotifyPoliceEmergencyOthers',
-        ],
-
-        'App\Events\PoliceEmergencyPersonal' => [
-            'App\Listeners\NotifyPoliceEmergencyPersonal',
+        'App\Events\PoliceEmergencyAccident' => [
+            'App\Listeners\NotifyPoliceEmergencyAccident',
         ],
 
         'App\Events\PoliceComplaints' => [

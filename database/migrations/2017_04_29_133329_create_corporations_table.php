@@ -15,6 +15,8 @@ class CreateCorporationsTable extends Migration
     {
         Schema::create('corporations', function (Blueprint $table) {
             $table->bigInteger('id')->primary();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('address_line_1');
             $table->string('address_line_2');
             $table->string('city');

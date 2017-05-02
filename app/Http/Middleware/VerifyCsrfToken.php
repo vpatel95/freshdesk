@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         '/api/android/*',
-        'broadcasting/auth'
+        'broadcasting/auth',
+        '/hopspital/emergency/other'
     ];
 }

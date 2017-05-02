@@ -15,13 +15,9 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('user', function($user) {
-	return true;
-});
-
-Broadcast::channel('emergencyOther.{hId}', function($user, $hId) {
+Broadcast::channel('hospitalEmergencyAccident.{hId}', function($user, $hId) {
 	if($user->role == 'hospital' && $user->id == $hId)
 		return true;
-
-	return false;
+	else
+		return false;
 });

@@ -38,6 +38,11 @@ Route::get('/home',[
 	'as' => 'home'
 ]);
 
+Route::post('/hopspital/emergency/other', [
+	'uses' => 'EmergencyController@hospitalEmergencyAccident',
+	'as' => 'hospital.emergency.accident'
+]);
+
 Route::post('/logout', [
 	'uses' => 'Auth\LoginController@logout',
 	'as' => 'logout'

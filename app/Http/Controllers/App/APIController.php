@@ -7,7 +7,7 @@ use App\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Events\HospitalEmergencyOthers;
+use App\Events\HospitalEmergencyAccident;
 
 class APIController extends Controller {
     
@@ -21,19 +21,24 @@ class APIController extends Controller {
 
     public function event(Request $request) {
 
-    	$user_id = $request['user_id'];
-    	$location = $request['location'];
-    	$hospital_id = $request['hospital_id'];
+    	$user = $request['user'];
+        $h_id = $request['h_id'];
+        $ps_id = $request['ps_id'];
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+        $self = $request['self'];
     	
     	if($this->token != $request['token']){
-    		$response['ERROR'] = 'TOKEN_MISMATCH';
-    		return json_encode($response);
+    		return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
     	}
-    	$user = User::find($user_id);
-    	event(new HospitalEmergencyOthers($user, $location, $hospital_id));
 
-    	$response['SUCCESS'] = 'EVENT_FIRED';
-    	return json_encode($response);
+    	event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self));
+
+    	return response()->json([
+            'SUCCESS' => 'EVENT_FIRED'
+        ]);
 
     }
 }

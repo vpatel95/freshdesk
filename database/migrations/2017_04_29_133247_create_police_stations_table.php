@@ -17,6 +17,8 @@ class CreatePoliceStationsTable extends Migration
             //$table->bigIncrements('id');
             $table->bigInteger('id')->primary();
             $table->bigInteger('branch_id')->unique();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('address_line_1');
             $table->string('address_line_2');
             $table->string('city');

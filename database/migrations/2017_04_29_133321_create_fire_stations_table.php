@@ -16,6 +16,8 @@ class CreateFireStationsTable extends Migration
         Schema::create('fire_stations', function (Blueprint $table) {
             $table->bigInteger('id')->primary();
             $table->integer('branch_id');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('pincode');

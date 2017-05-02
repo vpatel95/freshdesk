@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="{{ URL::to('js/lib/bootstrap-switch/stylesheets/ebro_bootstrapSwitch.css') }}">
 <link rel="stylesheet" href="{{ URL::to('css/style.css') }}">
 <link rel="stylesheet" href="{{ URL::to('css/theme/color_1.css') }}" id="theme">
+<link rel="stylesheet" type="text/css" href="{{ URL::to('toastr/build/toastr.min.css') }}">
 
 <!--[if lt IE 9]>
 	<link rel="stylesheet" href="css/ie.css">

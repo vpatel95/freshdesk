@@ -10,6 +10,7 @@
 <script src="{{ URL::to('js/lib/TouchSwipe/jquery.touchSwipe.min.js') }}"></script>	
 <script src="{{ URL::to('js/lib/navgoco/jquery.navgoco.min.js') }}"></script>
 <script src="{{ URL::to('js/ebro_common.js') }}"></script>
+<script src="{{ URL::to('toastr/build/toastr.min.js') }}"></script>
 
 <!--[if lte IE 9]>
 	<script src="{{ URL::to('js/ie/jquery.placeholder.js') }}"></script>
@@ -19,6 +20,18 @@
 		});
 	</script>
 <![endif]-->
+
+<script type="text/javascript">
+	toastr.options = {
+	  	"closeButton": true,
+	  	"timeOut": "0",
+	  	"extendedTimeOut": "0",
+	  	"hideDuration": "0",
+	  	"hideDuration": "0",
+	 	"hideEasing": "linear",
+	  	"hideMethod": "slideUp"
+	}
+</script>
 	
 <script>
     (function(i,s,o,g,r,a,m){

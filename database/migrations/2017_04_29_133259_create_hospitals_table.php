@@ -17,6 +17,8 @@ class CreateHospitalsTable extends Migration
             $table->bigInteger('id')->primary();
             $table->string('name');
             $table->bigInteger('ps_id');
+            $table->string('latitude')->nullable();
+            $table->string('longitute')->nullable();
             $table->string('address_line_1');
             $table->string('address_line_2');
             $table->string('city');
