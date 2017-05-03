@@ -21,3 +21,10 @@ Broadcast::channel('hospitalEmergencyAccident.{hId}', function($user, $hId) {
 	else
 		return false;
 });
+
+Broadcast::channel('hospitalEmergencyPersonal.{hId}', function($user, $hId) {
+	if($user->role == 'hospital' && $user->id == $hId)
+		return true;
+	else
+		return false;
+});

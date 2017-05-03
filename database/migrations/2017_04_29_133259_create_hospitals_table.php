@@ -16,7 +16,6 @@ class CreateHospitalsTable extends Migration
         Schema::create('hospitals', function (Blueprint $table) {
             $table->bigInteger('id')->primary();
             $table->string('name');
-            $table->bigInteger('ps_id');
             $table->string('latitude')->nullable();
             $table->string('longitute')->nullable();
             $table->string('address_line_1');
@@ -32,7 +31,6 @@ class CreateHospitalsTable extends Migration
 
         Schema::table('hospitals', function(Blueprint $table) {
             $table->foreign('id')->references('id')->on('users');
-            $table->foreign('ps_id')->references('id')->on('police_stations');
         });
     }
 

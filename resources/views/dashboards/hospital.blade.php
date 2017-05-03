@@ -18,10 +18,34 @@
 	<div id="main_content_outer" class="clearfix">
 		<div id="main_content">
 			<div class="row">
-				<div class="col-sm-5 dd_column" id="dd_column_01">
+				<div class="col-sm-6 dd_column" id="dd_column_01">
 					<div class="row">
 						<center>
 							<h4>EMERGENCY</h4>
+						</center>
+					</div>
+					@foreach($data['hea'] as $hea)
+						<div class="panel panel-danger dd_widget" id="dd_panel_{{ $hea->id }}">
+							<div class="panel-heading">
+								<h4 class="panel-title">Emergency : {{ $hea->type === 'personal' ? 'Personal' : 'Accident' }}</h4>
+							</div>
+							<div class="panel-body-narrow dd_content">
+								<p><b>Address</b> : {{ $hea->address }}</p>
+								@if($hea->type === 'accident')
+									<p><b>Police Informed</b> : {{ $hea->policeStation->address_line_1 . ', ' . $hea->policeStation->address_line_2 . ', ' . $hea->policeStation->city }}</p>
+									<p><b>Police Contact</b> : {{ $hea->policeStation->contact }}</p>
+								@endif
+								<p><b>Notifier</b> : {{ App\UserDetail::find($hea->u_id)->name }}</p>
+								<p><b>Notifier Contact</b> : {{ App\UserDetail::find($hea->u_id)->phone_no }}</p>
+								<p><b>Self</b> : {{ $hea->self }}</p>
+							</div>
+						</div>
+					@endforeach
+				</div>
+				<div class="col-sm-6 dd_column" id="dd_column_02">
+					<div class="row">
+						<center>
+							<h4>NORMAL</h4>
 						</center>
 					</div>
 					<div class="panel panel-primary dd_widget" id="dd_panel_01">
@@ -57,99 +81,14 @@
 							</table>	
 						</div>
 					</div>
-					<div class="panel panel-danger dd_widget" id="dd_panel_03">
-						<div class="panel-heading">
-							<h4 class="panel-title">Lorem ipsum&hellip;</h4>
-						</div>
-						<div class="panel-body-narrow dd_content">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-7 dd_column" id="dd_column_02">
-					<div class="row">
-						<center>
-							<h4>NORMAL</h4>
-						</center>
-					</div>
-					<div class="panel panel-default dd_widget" id="dd_panel_05">
-						<div class="panel-heading">
-							<h4 class="panel-title">Box with pagination</h4>
-						</div>
-						<div class="dd_content">
-							<div class="panel-body">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam non dignissimos sapiente libero deleniti officia eos enim ad beatae laudantium quia mollitia perspiciatis reprehenderit soluta aperiam alias vel cum quam.
-							</div>
-							<div class="panel-footer text-center">
-								<ul class="pagination pagination-sm">
-									<li><a href="#">1</a></li>
-									<li class="active"><a href="#">2</a></li>
-									<li><a href="#">3</a></li>
-									<li><a href="#">4</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
 					<div class="panel panel-default dd_widget" id="dd_panel_06">
 						<div class="panel-heading">
-							<h4 class="panel-title">Users</h4>
+							<h4 class="panel-title">Personal</h4>
 						</div>
 						<div class="dd_content">
 							<table class="table">
 								<tbody>
 									<tr>
-										<td>
-											<img src="img/avatars/avatar_1.jpg" alt="" class="img-thumbnail">
-										</td>
-										<td>
-											<strong>
-												<a href="#">Lorem ipsum dolor sit</a>
-											</strong>
-											<br>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										</td>
-										<td><span class="label label-info">23 Nov</span></td>
-									</tr>
-									<tr class="success">
-										<td>
-											<img src="img/avatars/avatar_1.jpg" alt="" class="img-thumbnail">
-										</td>
-										<td>
-											<strong>
-												<a href="#">Lorem ipsum dolor sit</a>
-											</strong>
-											<br>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										</td>
-										<td><span class="label label-info">23 Nov</span></td>
-									</tr><tr>
-										<td>
-											<img src="img/avatars/avatar_1.jpg" alt="" class="img-thumbnail">
-										</td>
-										<td>
-											<strong>
-												<a href="#">Lorem ipsum dolor sit</a>
-											</strong>
-											<br>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										</td>
-										<td><span class="label label-info">23 Nov</span></td>
-									</tr><tr>
-										<td>
-											<img src="img/avatars/avatar_1.jpg" alt="" class="img-thumbnail">
-										</td>
-										<td>
-											<strong>
-												<a href="#">Lorem ipsum dolor sit</a>
-											</strong>
-											<br>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										</td>
-										<td><span class="label label-info">23 Nov</span></td>
-									</tr><tr>
-										<td>
-											<img src="img/avatars/avatar_1.jpg" alt="" class="img-thumbnail">
-										</td>
 										<td>
 											<strong>
 												<a href="#">Lorem ipsum dolor sit</a>
@@ -266,28 +205,78 @@
 
 @push('scripts')
 	<script src="{{ URL::to('js/lib/jquery_ui/jquery-ui-1.10.3.custom.min.js') }}"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCKmF_9vnsAGOsV21fibabqBhzYfbVrO6g"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key={{ config('app.google_api') }}"></script>
 
+	<script type="text/javascript">
+		function returnGeoCodeHEA(type, address, user, lat, lon, ps_id, self, h_id) {
+			$.ajax({
+				type : 'POST',
+				url : '{{ route('hospital.emergency.accident') }}',
+				data : {
+					type : type,
+					address : address,
+					user : user,
+					lat : lat,
+					lon : lon,
+					h_id : h_id,
+					ps_id : ps_id,
+					self : self
+				},
+				success : function(response) {
+					if(response.address === 'N/A')
+						toastr['warning']('Please call the Notifier Immediately','Empty Address');
+					$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Accident</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Police Informed</b> : ' + response.police + '</p><p><b>Police Contact</b> : ' + response.ps_contact + '</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p><b>Self</b> : ' + response.self + '</p></div></div>');
+				}
+			});
+		}
+
+		function returnGeoCodeHEP(type, address, user, lat, lon, self, h_id) {
+			$.ajax({
+				type : 'POST',
+				url : '{{ route('hospital.emergency.personal') }}',
+				data : {
+					type : type,
+					address : address,
+					user : user,
+					lat : lat,
+					lon : lon,
+					h_id : h_id,
+					self : self
+				},
+				success : function(response) {
+					$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Personal</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p><b>Self</b> : ' + response.self + '</p></div></div>');
+				}
+			});
+		}
+
+		function getGeoCode(type, latitude, longitude, user, h_id, ps_id, self) {
+			var geocoder;
+			var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+			geocoder = new google.maps.Geocoder();
+			geocoder.geocode({'location': latlng}, function(results, status) {
+			    if (results[0]) {
+			       	var location = results[0].formatted_address;
+			    } else {
+			       	var location = 'N/A';
+			    }
+			    if(type === 'accident'){
+			    	returnGeoCodeHEA(type, location, user, latitude, longitude, ps_id, self, h_id);
+			    } else if(type === 'personal') {
+			    	returnGeoCodeHEP(type, location, user, latitude, longitude, self, h_id);
+			    }
+			});
+		}
+	</script>
 	<script type="text/javascript">
 		Echo.private('hospitalEmergencyAccident.' + {{ $user->id }})
 		    .listen('HospitalEmergencyAccident', (e) => {
 		        console.log(e);
-		        toastr["error"](e.ps_id, e.h_id);
-		        var geocoder;
-		        var latlng = {lat: parseFloat(e.lat), lng: parseFloat(e.lon)};
-		        geocoder = new google.maps.Geocoder();
-		        geocoder.geocode({'location': latlng}, function(results, status) {
-					    if (status === 'OK') {
-					        if (results[0]) {
-					        	var location = results[0].formatted_address;
-					        	alert(location);
-					    } else {
-					        window.alert('No results found');
-					    }
-					} else {
-				        window.alert('Geocoder failed due to: ' + status);
-				    }
-				});
+		        getGeoCode('accident', e.lat, e.lon, e.user, e.h_id, e.ps_id, e.self);
 		    });
+		Echo.private('hospitalEmergencyPersonal.' + {{ $user->id }})
+			.listen('HospitalEmergencyPersonal', (e) => {
+				console.log(e);
+				getGeoCode('personal', e.lat, e.lon, e.user, e.h_id, e.self);
+			});
 	</script>
 @endpush

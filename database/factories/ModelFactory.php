@@ -71,7 +71,6 @@ $factory->define(App\Hospital::class, function (Faker\Generator $faker) {
     return [
     	'id' => $faker->unique()->numberBetween($min = 511, $max = 520),
     	'name' => $faker->name,
-    	'ps_id' => $faker->numberBetween($min = 501, $max = 510),
         'address_line_1' => $faker->sentence($nbWords = 3, $variableNbWords = true),
         'address_line_2' => $faker->sentence($nbWords = 3, $variableNbWords = true),
         'city' => $faker->randomElement($array = array ('Chennai','Coimbatore','Kanchipuram')),

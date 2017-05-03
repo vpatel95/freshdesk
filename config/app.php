@@ -109,6 +109,8 @@ return [
 
     'token' => env('API_TOKEN'),
 
+    'google_api' => env('GOOGLE_API'),
+
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration

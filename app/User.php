@@ -26,4 +26,40 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function userDetail(){
+
+        return $this->hasOne('App\UserDetail', 'id');
+    }
+
+    public function policeStation(){
+        
+        return $this->hasOne('App\PoliceStation', 'id');
+    }
+
+    public function hospital(){
+        
+        return $this->hasOne('App\Hospital', 'id');
+    }
+
+    public function doctor(){
+        
+        return $this->hasOne('App\Doctor', 'id');
+    }
+
+    public function police(){
+        
+        return $this->hasOne('App\Police', 'id');
+    }
+
+    public function corporation(){
+        
+        return $this->hasOne('App\Corporation', 'id');
+    }   
+
+    public function fireStation(){
+        
+        return $this->hasOne('App\FireStation', 'id');
+    }
+
 }

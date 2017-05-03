@@ -4,10 +4,12 @@ namespace App\Http\Controllers\App;
 
 use App\User;
 use App\UserDetail;
+use App\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Events\HospitalEmergencyAccident;
+use App\Events\HospitalEmergencyPersonal;
 
 class APIController extends Controller {
     
@@ -19,7 +21,13 @@ class APIController extends Controller {
     
     }
 
-    public function event(Request $request) {
+    public function eventHEA(Request $request) {
+
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
 
     	$user = $request['user'];
         $h_id = $request['h_id'];
@@ -27,18 +35,94 @@ class APIController extends Controller {
         $lat = $request['lat'];
         $lon = $request['lon'];
         $self = $request['self'];
-    	
-    	if($this->token != $request['token']){
-    		return response()->json([
+
+    	if(event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self)))
+        	return response()->json([
+                'SUCCESS' => 'EVENT_FIRED'
+            ]);
+
+        return response()->json([
+            'ERROR' => 'EVENT_FIRE_FAIL'
+        ]);
+    }
+
+    public function eventHEP(Request $request) {
+        
+        if($this->token != $request['token']){
+            return response()->json([
                 'ERROR' => 'TOKEN_MISMATCH'
             ]);
-    	}
+        }
 
-    	event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self));
+        $user = $request['user'];
+        $h_id = $request['h_id'];
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+        $self = $request['self'];
 
-    	return response()->json([
-            'SUCCESS' => 'EVENT_FIRED'
+        if(event(new HospitalEmergencyPersonal($user, $h_id, $lat, $lon, $self)))
+            return response()->json([
+                'SUCCESS' => 'EVENT_FIRED'
+            ]);
+
+        return response()->json([
+            'ERROR' => 'EVENT_FIRE_FAIL'
         ]);
+    }
 
+    public function getHospitalBySpeciality(Request $request) {
+        
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $sp = $request['specialization'];
+        $hs_sp = Hospital::where('specialization->sp',$sp)->get();
+
+        if(sizeof($hs_sp) == 0){
+            return response()->json([
+                'hospital' => 'NO_HOSPITAL_FOUND'
+            ]);
+        }
+
+        for ($i=0; $i < sizeof($hs_sp); $i++) { 
+            $hos[$i]['id'] = $hs_sp[$i]['id'];
+            $hos[$i]['name'] = $hs_sp[$i]['name'];
+        }
+
+        return response()->json([
+            'hospital' => $hos
+        ]);
+    }
+
+    public function getHospitalByRating(Request $request) {
+
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $rating = $request['rating'];
+
+        $hospital = Hospital::where('rating', '>', $rating)->orderBy('rating', 'desc')->get();
+
+        if(sizeof($hospital) == 0){
+            return response()->json([
+                'hospital' => 'NO_HOSPITAL_FOUND'
+            ]);
+        }
+
+        for ($i=0; $i < sizeof($hospital); $i++) { 
+            $hos[$i]['id'] = $hs_sp[$i]['id'];
+            $hos[$i]['name'] = $hs_sp[$i]['name'];
+        }
+
+        return response()->json([
+            'hospital' => $hospital
+        ]);
+        
     }
 }

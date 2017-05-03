@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use User;
 use UserDetail;
 use Hospital;
+use App\HospitalEmergencyAccident;
+use App\HospitalEmergencyNearBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +31,15 @@ class HomeController extends Controller {
     public function dashboard() {
 
         $user = Auth::user();
-        return view('dashboards.' . $user->role, ['user' => $user]);
+        if($user->role === 'hospital') {
+            $data['hea'] = HospitalEmergencyAccident::all()->where('h_id', $user->id);
+            $data['hnb'] = HospitalEmergencyNearBy::all()->where('h_id', $user->id);
+        } else {
+            $data = null;
+        }
+        return view('dashboards.' . $user->role, [
+            'user' => $user,
+            'data' => $data
+        ]);
     }
 }

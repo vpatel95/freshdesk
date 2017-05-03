@@ -38,15 +38,22 @@ Route::get('/home',[
 	'as' => 'home'
 ]);
 
-Route::post('/hopspital/emergency/other', [
-	'uses' => 'EmergencyController@hospitalEmergencyAccident',
-	'as' => 'hospital.emergency.accident'
-]);
-
 Route::post('/logout', [
 	'uses' => 'Auth\LoginController@logout',
 	'as' => 'logout'
 ]);
+
+
+Route::post('/hospital/emergency/accident', [
+	'uses' => 'EmergencyController@hospitalEmergencyAccident',
+	'as' => 'hospital.emergency.accident'
+]);
+
+Route::post('/hospital/emergency/personal', [
+	'uses' => 'EmergencyController@hospitalEmergencyPersonal',
+	'as' => 'hospital.emergency.personal'
+]);
+
 
 Route::prefix('api/android')->group(function(){
 	
@@ -58,8 +65,20 @@ Route::prefix('api/android')->group(function(){
 		'uses' => 'App\LoginController@register'
 	]);
 
-	Route::post('/event', [
-		'uses' => 'App\APIController@event',
+	Route::post('/event/hea', [
+		'uses' => 'App\APIController@eventHEA'
+	]);
+
+	Route::post('/event/hep', [
+		'uses' => 'App\APIController@eventHEP'
+	]);
+
+	Route::post('/hospital/specialization', [
+		'uses' => 'App\APIController@getHospitalBySpeciality'
+	]);
+
+	Route::post('/hospital/rating', [
+		'uses' => 'App\APIController@getHospitalByRating'
 	]);
 
 });

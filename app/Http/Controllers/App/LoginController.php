@@ -30,8 +30,9 @@ class LoginController extends Controller {
     public function login(Request $request) {
 
     	if($this->token != $request['token']){
-    		$response['ERROR'] = 'TOKEN_MISMATCH';
-    		return json_encode($response);
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
     	}
 
     	$email = $request['email'];
@@ -39,24 +40,25 @@ class LoginController extends Controller {
 
     	if(Auth::once(['email' => $email, 'password' => $password])){
     		$user = User::where('email',$email)->first();
-    		$response['success'] = 'LOGIN_SUCCESS';
-    		$response['user'] = $user;
-    		return json_encode($response);
+            return response()->json([
+                'SUCCESS' => 'LOGIN_SUCCESS',
+                'user' => $user
+            ]);
 
     	} else {
-    		$response['ERROR'] = 'INVALID_CREDENTIALS';
+    		return response()->json([
+                'ERROR' => 'INVALID_CREDENTIALS'
+            ]);
     	}
-
-
-    	return json_encode($response);
 
     }
 
     public function register(Request $request) {
 
     	if($this->token != $request['token']){
-    		$response['ERROR'] = 'TOKEN_MISMATCH';
-    		return json_encode($response);
+    		return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
     	}
 
         $email = $request['email'];
@@ -64,8 +66,9 @@ class LoginController extends Controller {
         $phone_no = $request['phone_no'];
 
         if(User::where('email',$email)->exists()){
-            $response['ERROR'] = 'EMAIL_ALREADY_TAKEN';
-            return json_encode($response);
+            return response()->json([
+                'ERROR' => 'EMAIL_ALREADY_TAKEN'
+            ]);
         }
 
         if(UserDetail::where('govt_id_no',$govt_id_no)->exists()){
@@ -74,8 +77,9 @@ class LoginController extends Controller {
         }
 
         if(UserDetail::where('phone_no',$phone_no)->exists()){
-            $response['ERROR'] = 'PHONE_NO_ALREADY_TAKEN';
-            return json_encode($response);
+            return response()->json([
+                'ERROR' => 'PHONE_NO_ALREADY_TAKEN'
+            ]);
         }
 
 
@@ -118,9 +122,10 @@ class LoginController extends Controller {
 
     	if(Auth::once(['email' => $email, 'password' => $password])) {
     		$user = User::where('email',$email)->first();
-    		$response['success'] = 'REGISTER_SUCCESS';
-    		$response['user'] = $user;
-    		return json_encode($response);
+    		return response()->json([
+                'SUCCESS' => 'REGISTER_SUCCESS',
+                'user' => $user
+            ]);
     	}
     }
 

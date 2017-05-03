@@ -15,11 +15,13 @@ class CreateHospitalEmergencyAccidentsTable extends Migration
     {
         Schema::create('hospital_emergency_accidents', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('type');
             $table->bigInteger('u_id');
             $table->bigInteger('h_id');
-            $table->bigInteger('ps_id');
+            $table->bigInteger('ps_id')->nullable();
             $table->string('latitude');
             $table->string('longitude');
+            $table->text('address');
             $table->boolean('self')->default(false);
             $table->timestamps();
         });
