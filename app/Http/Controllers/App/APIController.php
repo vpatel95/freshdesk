@@ -21,6 +21,15 @@ class APIController extends Controller {
     
     }
 
+    private function getDistance($lat1, $lat2, $lon1, $lon2) {
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $km = $dist * 60 * 1.1515 * 1.609344;
+        return $dist;
+    }
+
     public function eventHEA(Request $request) {
 
         if($this->token != $request['token']){
@@ -124,5 +133,29 @@ class APIController extends Controller {
             'hospital' => $hospital
         ]);
         
+    }
+
+    public function getHospitalByDistance(Request $request) {
+        
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+
+        $hos = Hospital::all();
+
+        for ($i=0; $i < sizeof($hos); $i++) { 
+            $h[$i]['id'] = $hos[$i]['id'];
+            $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
+            $h[$i]['rating'] = $hos[$i]['rating'];
+        }
+
+        return response()->json([
+            'hospital' => $h
+        ]);
     }
 }
