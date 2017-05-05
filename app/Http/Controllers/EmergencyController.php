@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\PoliceEmergencyAccident;
 use App\HospitalEmergencyAccident;
 use App\HospitalEmergencyPersonal;
 use App\PoliceStation;
 use App\User;
+use App\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -71,6 +73,35 @@ class EmergencyController extends Controller {
 		    'user_contact' => User::find($user)->userDetail->phone_no,
 		    'address' => $address,
 		    'self' => $self
+		]);
+	}
+
+	public function policeEmergencyAccident(Request $request) {
+
+		$address = $request['address'];
+		$user = $request['notifier'];
+		$hospital = $request['hospital'];
+		$lat = $request['lat'];
+		$lon = $request['lon'];
+		$ps_id = $request['ps_id'];
+
+		$pea = new PoliceEmergencyAccident();
+		$pea->u_id = $user;
+		$pea->h_id = $hospital;
+		$pea->latitude = $lat;
+		$pea->longitude = $lon;
+		$pea->ps_id = $ps_id;
+		$pea->accident_address = $address;
+		$pea->save();
+
+		$h = Hospital::find($hospital);
+
+		return response()->json([
+			'notifier' => User::find($user)->userDetail->name,
+			'notifier_contact' => User::find($user)->userDetail->phone_no,
+			'hospital' => $h->name,
+			'hospital_contact' => $h->contact,
+			'hospital_address' => $h->address_line_1 . '. ' . $h->address_line_2 . '. ' . $h->city
 		]);
 	}
     

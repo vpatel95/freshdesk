@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHospitalEmergencyNearBiesTable extends Migration
+class CreatePoliceEmergencyAccidentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreateHospitalEmergencyNearBiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('hospital_emergency_near_bies', function (Blueprint $table) {
+        Schema::create('police_emergency_accidents', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('u_id');
             $table->bigInteger('h_id');
-            $table->string('disease');
-            $table->text('description');
-            $table->dateTime('appointment_date');
+            $table->bigInteger('ps_id');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->text('accident_address');
             $table->timestamps();
         });
 
-        Schema::table('hospital_emergency_near_bies', function(Blueprint $table) {
+        Schema::table('police_emergency_accidents', function (Blueprint $table) {
             $table->foreign('u_id')->references('id')->on('users');
             $table->foreign('h_id')->references('id')->on('hospitals');
+            $table->foreign('ps_id')->references('id')->on('police_stations');
         });
     }
 
@@ -36,6 +38,6 @@ class CreateHospitalEmergencyNearBiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hospital_emergency_near_bies');
+        Schema::dropIfExists('police_emergency_accidents');
     }
 }

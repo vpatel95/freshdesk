@@ -14,6 +14,7 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         '/api/android/*',
         '/hospital/emergency/*',
-        'hospital/nearby'
+        'hospital/nearby',
+        'police/emergency/*'
     ];
 }

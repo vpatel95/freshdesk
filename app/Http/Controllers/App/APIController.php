@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Events\HospitalNearBy;
+use App\Events\PoliceEmergencyAccident;
 use App\Events\HospitalEmergencyAccident;
 use App\Events\HospitalEmergencyPersonal;
 
@@ -46,10 +47,13 @@ class APIController extends Controller {
         $lon = $request['lon'];
         $self = $request['self'];
 
-    	if(event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self)))
-        	return response()->json([
-                'SUCCESS' => 'EVENT_FIRED'
-            ]);
+    	if(event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self))){
+            if(event(new PoliceEmergencyAccident($ps_id, $user, $h_id, $lat, $lon))) {
+                return response()->json([
+                    'SUCCESS' => 'EVENT_FIRED'
+                ]);
+            }
+        }
 
         return response()->json([
             'ERROR' => 'EVENT_FIRE_FAIL'

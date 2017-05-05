@@ -6,6 +6,7 @@ use User;
 use UserDetail;
 use Hospital;
 use App\HospitalEmergencyAccident;
+use App\PoliceEmergencyAccident;
 use App\HospitalEmergencyNearBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,8 @@ class HomeController extends Controller {
         if($user->role === 'hospital') {
             $data['hea'] = HospitalEmergencyAccident::all()->where('h_id', $user->id);
             $data['hnb'] = HospitalEmergencyNearBy::all()->where('h_id', $user->id);
-        } else {
-            $data = null;
+        } elseif ($user->role === 'police_station') {
+            $data['pea'] = PoliceEmergencyAccident::all()->where('ps_id', $user->id);
         }
         return view('dashboards.' . $user->role, [
             'user' => $user,

@@ -153,95 +153,95 @@
         	
 @section('side-nav')	
 <nav id="side_fixed_nav">
-	<div class="slim_scroll">
-		<div class="side_nav_actions">
-			<a href="javascript:void(0)" id="side_fixed_nav_toggle"><span class="icon-align-justify"></span></a>
-			<div id="toogle_nav_visible" class="make-switch switch-mini" data-on="success" data-on-label="<i class='icon-lock'></i>" data-off-label="<i class='icon-unlock-alt'></i>">
-				<input id="nav_visible_input" type="checkbox">
+			<div class="slim_scroll">
+				<div class="side_nav_actions">
+					<a href="javascript:void(0)" id="side_fixed_nav_toggle"><span class="icon-align-justify"></span></a>
+					<div id="toogle_nav_visible" class="make-switch switch-mini" data-on="success" data-on-label="<i class='icon-lock'></i>" data-off-label="<i class='icon-unlock-alt'></i>">
+						<input id="nav_visible_input" type="checkbox">
+					</div>
+				</div>
+				<ul id="text_nav_side_fixed">
+					<li>
+						<a href="javascript:void(0)"><span class="icon-dashboard"></span>Dashboard</a>
+						<ul>
+							<li><a href="dashboard.html">Dashboard</a></li>
+							<li class="link_active"><a href="dashboard_drag_drop.html">Drag & Drop Dashboard</a></li>
+							<li>
+								<a href="javascript:void(0)">Navigations</a>
+								<ul>
+									<li><a href="nav_side_accordion.html">Accordion Navigation</a></li>
+									<li><a href="nav_side_icons.html">Icon Navigation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><span class="icon-th-list"></span>Forms</a>
+						<ul>
+							<li><a href="form_regular_elements.html">Regular elements</a></li>
+							<li><a href="form_extended_elements.html">Extended elements</a></li>
+							<li><a href="form_multiupload.html">Multiupload</a></li>
+							<li><a href="form_validation.html">Form validation</a></li>
+							<li><a href="wizard.html">Wizard</a></li>
+							<li><a href="wysiwg.html">WYSIWG Editor</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><span class="icon-puzzle-piece"></span>Components</a>
+						<ul>
+							<li><a href="calendar.html">Calendar</a></li>
+							<li><a href="charts.html">Charts</a></li>
+							<li><a href="contact_list.html">Contact List</a></li>
+							<li><a href="editable_elements.html">Editable Elements</a></li>
+							<li><a href="file_manager.html">File manager</a></li>
+							<li><a href="gallery.html">Gallery</a></li>
+							<li><a href="gmaps.html">Google Maps</a></li>
+							<li>
+								<a href="javascript:void(0)">Tables</a>
+								<ul>
+									<li><a href="datatables.html">Datatables</a></li>
+									<li><a href="regular_tables.html">Regular</a></li>
+									<li><a href="slick_grid.html">Slick Grid</a></li>
+									<li><a href="table_responsive.html">Responsive Table</a></li>
+								</ul>
+							</li>
+							<li><a href="tree_plugin.html">Tree Plugin</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><span class="icon-beaker"></span>UI Elements</a>
+						<ul>
+							<li><a href="alerts_buttons.html">Alerts, Buttons</a></li>
+							<li><a href="grid.html">Grid</a></li>
+							<li><a href="icons.html">Icons</a></li>
+							<li><a href="notifications.html">Notifications</a></li>
+							<li><a href="panels.html">Panels</a></li>
+							<li><a href="tabs_accordions.html">Tabs, Accordions</a></li>
+							<li><a href="tooltips_popovers.html">Tooltips, Popovers</a></li>
+							<li><a href="typography.html">Typography</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><span class="icon-leaf"></span>Other Pages</a>
+						<ul>
+							<li><a href="blank.html">Blank page</a></li>
+							<li><a href="chat.html">Chat</a></li>
+							<li><a href="contact_page.html">Contact Page</a></li>
+							<li><a href="error_404.html">Error 404</a></li>
+							<li><a href="help_faq.html">Help/Faq</a></li>
+							<li><a href="invoices.html">Invoices</a></li>
+							<li><a href="landing_page.html">Landing Page</a></li>
+							<li><a href="login_page.html">Login Page</a></li>
+							<li><a href="mailbox.html">Mailbox</a></li>
+							<li><a href="pricing_table.html">Pricing Table</a></li>
+							<li><a href="search_page.html">Search Page</a></li>
+							<li><a href="settings.html">Site Settings</a></li>
+							<li><a href="user_profile.html">User profile</a></li>
+						</ul>
+					</li>				
+				</ul>
 			</div>
-		</div>
-		<ul id="text_nav_side_fixed">
-			<li>
-				<a href="javascript:void(0)"><span class="icon-dashboard"></span>Dashboard</a>
-				<ul>
-					<li><a href="#">Dashboard</a></li>
-					<li class="link_active"><a href="#">Drag &amp; Drop Dashboard</a></li>
-					<li>
-						<a href="javascript:void(0)">Navigations</a>
-						<ul>
-							<li><a href="#">Accordion Navigation</a></li>
-							<li><a href="#">Icon Navigation</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0)"><span class="icon-th-list"></span>Forms</a>
-				<ul>
-					<li><a href="#">Regular elements</a></li>
-					<li><a href="#">Extended elements</a></li>
-					<li><a href="#">Multiupload</a></li>
-					<li><a href="#">Form validation</a></li>
-					<li><a href="#">Wizard</a></li>
-					<li><a href="#">WYSIWG Editor</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0)"><span class="icon-puzzle-piece"></span>Components</a>
-				<ul>
-					<li><a href="##endar</a></li>
-					<li><a href="##rts</a></li>
-					<li><a href="##tact List</a></li>
-					<li><a href="##table Elements</a></li>
-					<li><a href="##e manager</a></li>
-					<li><a href="##lery</a></li>
-					<li><a href="##gle Maps</a></li>
-					<li>
-						<a href="javascript:void(0)">Tables</a>
-						<ul>
-							<li><a href="##atables</a></li>
-							<li><a href="##ular</a></li>
-							<li><a href="##ck Grid</a></li>
-							<li><a href="##ponsive Table</a></li>
-						</ul>
-					</li>
-					<li><a href="##e Plugin</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0)"><span class="icon-beaker"></span>UI Elements</a>
-				<ul>
-					<li><a href="#">Alerts, Buttons</a></li>
-					<li><a href="#">Grid</a></li>
-					<li><a href="#">Icons</a></li>
-					<li><a href="#">Notifications</a></li>
-					<li><a href="#">Panels</a></li>
-					<li><a href="#">Tabs, Accordions</a></li>
-					<li><a href="#">Tooltips, Popovers</a></li>
-					<li><a href="typography.html">Typography</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0)"><span class="icon-leaf"></span>Other Pages</a>
-				<ul>
-					<li><a href="#">Blank page</a></li>
-					<li><a href="#">Chat</a></li>
-					<li><a href="#">Contact Page</a></li>
-					<li><a href="#">Error 404</a></li>
-					<li><a href="#">Help/Faq</a></li>
-					<li><a href="#">Invoices</a></li>
-					<li><a href="#">Landing Page</a></li>
-					<li><a href="#">Login Page</a></li>
-					<li><a href="#">Mailbox</a></li>
-					<li><a href="#">Pricing Table</a></li>
-					<li><a href="#">Search Page</a></li>
-					<li><a href="#">Site Settings</a></li>
-					<li><a href="#">User profile</a></li>
-				</ul>
-			</li>				
-		</ul>
-	</div>
-</nav>
+		</nav>
 @endsection
 
 @push('scripts')

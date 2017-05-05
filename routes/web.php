@@ -72,6 +72,14 @@ Route::prefix('hospital')->group(function(){
 
 });
 
+Route::prefix('police')->group(function() {
+
+	Route::post('/emergency/accident', [
+		'uses' => 'EmergencyController@policeEmergencyAccident',
+		'as' => 'police.emergency.accident'
+	]);
+});
+
 
 Route::prefix('api/android')->group(function(){
 	

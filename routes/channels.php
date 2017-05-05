@@ -35,3 +35,10 @@ Broadcast::channel('hospitalNearBy.{hId}', function($user, $hId) {
 	else
 		return false;
 });
+
+Broadcast::channel('policeEmergencyAccident.{pId}', function($user, $pId) {
+	if($user->role == 'police_station' && $user->id == $pId)
+		return true;
+	else
+		return false;
+});
