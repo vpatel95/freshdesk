@@ -10,18 +10,26 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class AmbulanceRequested
-{
+class AmbulanceRequested implements ShouldBroadcast {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    public $user;
+    public $ambulance;
+    public $contact;
+    public $lat;
+    public $lon;
+    public $h_id;
+
+    public function __construct($user, $contact, $lat, $lon, $h_id, $ambulance) {
+
+        $this->user = $user;
+        $this->ambulance = $ambulance;
+        $this->contact = $contact;
+        $this->lat = $lat;
+        $this->lon = $lon;
+        $this->h_id = $h_id;
+        
     }
 
     /**
@@ -31,6 +39,6 @@ class AmbulanceRequested
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('ambulance.'.$this->ambulance);
     }
 }

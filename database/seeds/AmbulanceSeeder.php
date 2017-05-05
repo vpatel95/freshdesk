@@ -2,15 +2,15 @@
 
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
+class AmbulanceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run() {
-        
-        factory(App\User::class, 20)->create();
+    public function run()
+    {
+        factory(App\Ambulance::class, 20)->create();
     }
 }

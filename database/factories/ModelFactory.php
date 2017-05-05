@@ -16,10 +16,10 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
-    	'id' => $faker->unique()->numberBetween($min = 551, $max = 560),
+    	'id' => $faker->unique()->numberBetween($min = 561, $max = 580),
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
-        'role' => 'corporation',
+        'role' => 'ambulance',
         'remember_token' => str_random(10),
     ];
 });
@@ -139,6 +139,18 @@ $factory->define(App\Corporation::class, function (Faker\Generator $faker) {
     	'city' => $faker->randomElement($array = array ('Chennai','Coimbatore','Kanchipuram')),
         'state' => 'Tamil Nadu',
         'pincode' => $faker->randomElement($array = array ('603203','603002','600028')),
+        'contact' => $contact++,
+    ];
+});
+
+$factory->define(App\Ambulance::class, function (Faker\Generator $faker) {
+    static $password;
+    static $contact = 9090701000;
+
+    return [
+        'id' => $faker->unique()->numberBetween($min = 561, $max = 580),
+        'h_id' => $faker->numberBetween($min = 511, $max = 520),
+        'vehicle_no' => $faker->unique()->numberBetween($min = 1000, $max = 9999),
         'contact' => $contact++,
     ];
 });

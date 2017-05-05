@@ -20,5 +20,10 @@ class Hospital extends Model {
 
         return $this->hasMany('App\HospitalEmergencyNearBy', 'h_id');
     }
+
+    public function ambulance() {
+
+        return $this->hasMany('App\Ambulance', 'h_id');
+    }
     
 }

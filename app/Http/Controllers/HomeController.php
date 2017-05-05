@@ -37,6 +37,8 @@ class HomeController extends Controller {
             $data['hnb'] = HospitalEmergencyNearBy::all()->where('h_id', $user->id);
         } elseif ($user->role === 'police_station') {
             $data['pea'] = PoliceEmergencyAccident::all()->where('ps_id', $user->id);
+        } else {
+            $data = null;
         }
         return view('dashboards.' . $user->role, [
             'user' => $user,
