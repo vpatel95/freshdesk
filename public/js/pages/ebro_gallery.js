@@ -11,9 +11,9 @@
 				
 				//* galery grid
 				$this_gallery.mixitup({
-					layoutMode: 'grid', // Start in list mode (display: block) by default
+					layoutMode: 'list', // Start in list mode (display: block) by default
 					listClass: 'list', // Container class for when in list mode
-					gridClass: 'grid', // Container class for when in grid mode
+					gridClass: 'list', // Container class for when in grid mode
 					effects: ['fade','blur'], // List of effects
 					onMixEnd: function() {
 						ebro_gallery.light_Box();

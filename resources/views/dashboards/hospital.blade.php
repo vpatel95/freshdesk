@@ -13,6 +13,45 @@
 </section>
 @endsection
 
+@section('top_nav')
+<nav id="top_navigation">
+	<div class="container">
+		<ul id="icon_nav_h" class="top_ico_nav clearfix">
+			<li>
+				<a href="{{ route('home') }}">
+					<i class="icon-home icon-2x"></i>
+					<span class="menu_label">Home</span>
+				</a>
+			</li>
+			<li>             
+				<a href="{{ route('hospital.appointments') }}">
+					<i class="icon-group icon-2x"></i>
+					<span class="menu_label">Appointment Report</span>
+				</a>
+			</li>
+			<li>             
+				<a href="#">
+					<i class="icon-wrench icon-2x"></i>
+					<span class="menu_label">Emergency Accident</span>
+				</a>
+			</li>
+			<li>             
+				<a href="#">
+					<i class="icon-wrench icon-2x"></i>
+					<span class="menu_label">Emergency Personal</span>
+				</a>
+			</li>
+			<li>             
+				<a href="#">
+					<i class="icon-wrench icon-2x"></i>
+					<span class="menu_label">Settings</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+@endsection
+
 @section('content')
 <section class="container clearfix main_section">
 	<div id="main_content_outer" class="clearfix">
@@ -87,17 +126,19 @@
 						</div>
 						<div class="dd_content">
 							<table class="table">
-								<tbody>
-									<tr>
-										<td>
-											<strong>
-												<a href="#">Lorem ipsum dolor sit</a>
-											</strong>
-											<br>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										</td>
-										<td><span class="label label-info">23 Nov</span></td>
-									</tr>
+								<tbody id="nearby">
+									@foreach($data['hnb'] as $hnb)
+										<tr>
+											<td>
+												<strong>
+													<a href="{{ route('hospital.appointment', $hnb->u_id) }}">{{ App\UserDetail::find($hnb->u_id)->name }}</a>
+												</strong>
+												<p>Disease : {{ $hnb->disease }}</p>
+												<p>Appointment Date : {{ $hnb->appointment_date }}</p>
+											</td>
+											<td><span class="label label-info">23 Nov</span></td>
+										</tr>
+									@endforeach
 								</tbody>
 							</table>
 						</div>
@@ -277,6 +318,23 @@
 			.listen('HospitalEmergencyPersonal', (e) => {
 				console.log(e);
 				getGeoCode('personal', e.lat, e.lon, e.user, e.h_id, e.self);
+			});
+		Echo.private('hospitalNearBy.' + {{ $user->id }})
+			.listen('HospitalNearBy', (e) => {
+				console.log(e);
+				$.ajax({
+					type : 'POST',
+					url : '{{ route('hospital.nearby') }}',
+					data : {
+						user : e.user,
+						h_id : e.h_id,
+						disease : e.disease
+					},
+					success : function(response) {
+						$('#nearby').append('<tr><td><strong><a href="hospital/appointment/' + response.id +'">' + response.user + '</a></strong><p>Disease : ' + response.disease
+						 + '</p><p>Appointment Date : ' + response.appointment + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>');
+					}
+				});
 			});
 	</script>
 @endpush

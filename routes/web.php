@@ -43,16 +43,34 @@ Route::post('/logout', [
 	'as' => 'logout'
 ]);
 
+Route::prefix('hospital')->group(function(){
 
-Route::post('/hospital/emergency/accident', [
-	'uses' => 'EmergencyController@hospitalEmergencyAccident',
-	'as' => 'hospital.emergency.accident'
-]);
+	Route::get('/appointment', [
+		'uses' => 'HospitalController@getAppointmentView',
+		'as' => 'hospital.appointments'
+	]);
 
-Route::post('/hospital/emergency/personal', [
-	'uses' => 'EmergencyController@hospitalEmergencyPersonal',
-	'as' => 'hospital.emergency.personal'
-]);
+	Route::post('/emergency/accident', [
+		'uses' => 'EmergencyController@hospitalEmergencyAccident',
+		'as' => 'hospital.emergency.accident'
+	]);
+
+	Route::post('/emergency/personal', [
+		'uses' => 'EmergencyController@hospitalEmergencyPersonal',
+		'as' => 'hospital.emergency.personal'
+	]);
+
+	Route::post('/nearby', [
+		'uses' => 'HospitalController@nearby',
+		'as' => 'hospital.nearby'
+	]);
+
+	Route::get('/appointment/{id}', [
+		'uses' => 'HospitalController@getIndividualAppointment',
+		'as' => 'hospital.appointment'
+	]);
+
+});
 
 
 Route::prefix('api/android')->group(function(){
@@ -73,6 +91,10 @@ Route::prefix('api/android')->group(function(){
 		'uses' => 'App\APIController@eventHEP'
 	]);
 
+	Route::post('/event/hnb', [
+		'uses' => 'App\APIController@eventHNB'
+	]);
+
 	Route::post('/hospital/specialization', [
 		'uses' => 'App\APIController@getHospitalBySpeciality'
 	]);
@@ -84,5 +106,4 @@ Route::prefix('api/android')->group(function(){
 	Route::post('/hospital/distance', [
 		'uses' => 'App\APIController@getHospitalByDistance'
 	]);
-
 });

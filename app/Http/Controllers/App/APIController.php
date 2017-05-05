@@ -8,6 +8,7 @@ use App\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Events\HospitalNearBy;
 use App\Events\HospitalEmergencyAccident;
 use App\Events\HospitalEmergencyPersonal;
 
@@ -79,6 +80,28 @@ class APIController extends Controller {
         ]);
     }
 
+    public function eventHNB(Request $request) {
+
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $user = $request['user_id'];
+        $h_id = $request['h_id'];
+        $disease = $request['disease'];
+
+        if(event(new HospitalNearBy($user, $h_id, $disease)))
+            return response()->json([
+                'SUCCESS' => 'EVENT_FIRED'
+            ]); 
+
+        return response()->json([
+            'ERROR' => 'EVENT_FIRE_FAIL'
+        ]);       
+    }
+
     public function getHospitalBySpeciality(Request $request) {
         
         if($this->token != $request['token']){
@@ -147,6 +170,12 @@ class APIController extends Controller {
         $lon = $request['lon'];
 
         $hos = Hospital::all();
+
+        if(sizeof($hos) == 0){
+            return response()->json([
+                'hospital' => 'NO_HOSPITAL_FOUND'
+            ]);
+        }
 
         for ($i=0; $i < sizeof($hos); $i++) { 
             $h[$i]['id'] = $hos[$i]['id'];

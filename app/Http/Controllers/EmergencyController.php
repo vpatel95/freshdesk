@@ -8,6 +8,7 @@ use App\PoliceStation;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+
 class EmergencyController extends Controller {
 
 	public function hospitalEmergencyAccident(Request $request) {

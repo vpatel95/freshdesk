@@ -10,18 +10,19 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class HospitalNearBy
-{
+class HospitalNearBy implements ShouldBroadcast {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    public $user;
+    public $h_id;
+    public $disease;
+
+    public function __construct($user, $h_id, $disease) {
+
+        $this->user = $user;
+        $this->h_id = $h_id;
+        $this->disease = $disease;
     }
 
     /**
@@ -31,6 +32,6 @@ class HospitalNearBy
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('hospitalNearBy.'.$this->h_id);
     }
 }
