@@ -128,6 +128,15 @@ class APIController extends Controller {
         ]);       
     }
 
+    public function eventPF(Request $request){
+        $file = $request->file('media');
+        $filename = $request['filename'];
+
+        if($file) {
+            Storage::disk('local')->put($filename, File::get($file));
+        }
+    }
+
     public function getHospitalBySpeciality(Request $request) {
         
         if($this->token != $request['token']){
@@ -206,6 +215,8 @@ class APIController extends Controller {
         for ($i=0; $i < sizeof($hos); $i++) { 
             $h[$i]['id'] = $hos[$i]['id'];
             $h[$i]['name'] = $hos[$i]['name'];
+            $h[$i]['lat'] = $hos[$i]['latitude'];
+            $h[$i]['lon'] = $hos[$i]['longitute'];
             $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
             $h[$i]['rating'] = $hos[$i]['rating'];
         }
