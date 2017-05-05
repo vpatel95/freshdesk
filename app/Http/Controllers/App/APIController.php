@@ -178,7 +178,8 @@ class APIController extends Controller {
         }
 
         for ($i=0; $i < sizeof($hos); $i++) { 
-            $h[$i]['id'] = $hos[$i]['name'];
+            $h[$i]['id'] = $hos[$i]['id'];
+            $h[$i]['name'] = $hos[$i]['name'];
             $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
             $h[$i]['rating'] = $hos[$i]['rating'];
         }
