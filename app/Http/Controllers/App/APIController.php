@@ -54,9 +54,10 @@ class APIController extends Controller {
         }
 
         $hc = collect($h)->sortBy('dist');
-        return response()->json([
+        return $hc;
+        /*return response()->json([
             'hospital' => $hc
-        ]);
+        ]);*/
     }
 
     public function eventHEA(Request $request) {
@@ -75,7 +76,31 @@ class APIController extends Controller {
         $self = $request['self'];
 
         $contact = UserDetail::find($user)->phone_no;
-        $ambulance = Ambulance::where('h_id', $h_id)->where('occupied',false)->first();
+        
+        $hc = $this->sortHospital($lat, $lon);
+        $ha = $hc->toArray();
+        for ($i=0; $i < sizeof($ha); $i++) { 
+            if(Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->exists()) {
+                $ambulance = Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->first();                    
+                if(event(new HospitalEmergencyAccident($user, $ha[$i]['id'], $ps_id, $lat, $lon, $self))){
+                    if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha[$i]['id'], $ambulance->id))){
+                        if(event(new PoliceEmergencyAccident($ps_id, $user, $ha[$i]['id'], $lat, $lon))) {
+                            $am = Ambulance::find($ambulance->id);
+                            $am->occupied = true;
+                            $am->save();
+                            return response()->json([
+                                'SUCCESS' => 'EVENT_FIRED'
+                            ]);
+                        }
+                    }
+                }   
+            }
+        }
+
+        return response()->json([
+            'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
+        ]);
+        /*$ambulance = Ambulance::where('h_id', $h_id)->where('occupied',false)->first();
         if($ambulance == null)
             return response()->json([
                 'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
@@ -95,7 +120,7 @@ class APIController extends Controller {
 
         return response()->json([
             'ERROR' => 'EVENT_FIRE_FAIL'
-        ]);
+        ]);*/
     }
 
     public function eventHEP(Request $request) {
