@@ -78,6 +78,7 @@ class APIController extends Controller {
         $contact = UserDetail::find($user)->phone_no;
         
         $hc = $this->sortHospital($lat, $lon);
+        dd($hc);
         $ha = $hc->toArray();
         for ($i=0; $i < sizeof($ha); $i++) { 
             if(Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->exists()) {
