@@ -75,7 +75,6 @@ class APIController extends Controller {
         return $pc;
     }
 
-    //CHECK
     public function eventHEA(Request $request) {
 
         if($this->token != $request['token']){
@@ -149,7 +148,6 @@ class APIController extends Controller {
         ]);
     }
 
-    //CHECK
     public function eventHEP(Request $request) {
         
         if($this->token != $request['token']){
@@ -323,38 +321,11 @@ class APIController extends Controller {
             ]);
         }
 
-        $rating = $request['rating'];
-
-        $hospital = Hospital::where('rating', '>', $rating)->orderBy('rating', 'desc')->get();
-
-        if(sizeof($hospital) == 0){
-            return response()->json([
-                'hospital' => 'NO_HOSPITAL_FOUND'
-            ]);
-        }
-
-        for ($i=0; $i < sizeof($hospital); $i++) { 
-            $hos[$i]['id'] = $hs_sp[$i]['id'];
-            $hos[$i]['name'] = $hs_sp[$i]['name'];
-        }
-
-        return response()->json([
-            'hospital' => $hospital
-        ]);   
-    }
-
-    public function getHospitalByDistance(Request $request) {
-        
-        if($this->token != $request['token']){
-            return response()->json([
-                'ERROR' => 'TOKEN_MISMATCH'
-            ]);
-        }
-
         $lat = $request['lat'];
         $lon = $request['lon'];
+        $disease = $request['disease'];
 
-        $hos = Hospital::all();
+        $hos = Hospital::where('specialization->sp', $disease)->orderBy('rating')->get();
 
         if(sizeof($hos) == 0){
             return response()->json([
@@ -371,7 +342,42 @@ class APIController extends Controller {
             $h[$i]['rating'] = $hos[$i]['rating'];
         }
 
-        $hc = collect($h)->sortBy('dist');
+        $hc = collect($h);
+        return response()->json([
+            'hospital' => $hc
+        ]);
+    }
+
+    public function getHospitalByDistance(Request $request) {
+        
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+        $disease = $request['disease'];
+
+        $hos = Hospital::where('specialization->sp', $disease)->orderBy('rating')->get();
+
+        if(sizeof($hos) == 0){
+            return response()->json([
+                'hospital' => 'NO_HOSPITAL_FOUND'
+            ]);
+        }
+
+        for ($i=0; $i < sizeof($hos); $i++) { 
+            $h[$i]['id'] = $hos[$i]['id'];
+            $h[$i]['name'] = $hos[$i]['name'];
+            $h[$i]['lat'] = $hos[$i]['latitude'];
+            $h[$i]['lon'] = $hos[$i]['longitute'];
+            $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
+            $h[$i]['rating'] = $hos[$i]['rating'];
+        }
+
+        $hc = collect($h);
         return response()->json([
             'hospital' => $hc
         ]);

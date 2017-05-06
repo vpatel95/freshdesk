@@ -26,6 +26,7 @@ class CreateHospitalsTable extends Migration
             $table->string('contact');
             $table->json('specialization');
             $table->integer('rating');
+            $table->integer('price');
             $table->timestamps();
         });
 

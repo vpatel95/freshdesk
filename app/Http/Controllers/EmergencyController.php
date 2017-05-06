@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 
 class EmergencyController extends Controller {
 
-	//DONE CHECKING-LEFT
 	public function hospitalEmergencyAccident(Request $request) {
 
 		$user = $request['user'];
