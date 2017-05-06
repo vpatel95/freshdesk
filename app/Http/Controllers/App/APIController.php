@@ -7,6 +7,7 @@ use App\UserDetail;
 use App\Hospital;
 use App\Ambulance;
 use App\PoliceStation;
+use App\HospitalEmergencyNearBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -74,6 +75,7 @@ class APIController extends Controller {
         return $pc;
     }
 
+    //CHECK
     public function eventHEA(Request $request) {
 
         if($this->token != $request['token']){
@@ -82,24 +84,30 @@ class APIController extends Controller {
             ]);
         }
 
+        $address = $request['address'];
     	$user = $request['user'];
         $lat = $request['lat'];
         $lon = $request['lon'];
         $self = $request['self'] === 'true' ? true : false;
 
         $contact = UserDetail::find($user)->phone_no;
-
         $pc = $this->sortPoliceStation($lat, $lon);
         $ps_id = $pc->last();
-        
         $hc = $this->sortHospital($lat, $lon);
-        for ($i=0; $hc != null; $i++) { 
+
+        for ($i=0; sizeof($hc)>0; $i++) { 
+
             $ha = $hc->last();
+            
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
+                
                 if(event(new \App\Events\HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
+                    
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
+                        
                         if(event(new \App\Events\PoliceEmergencyAccident($ps_id['id'], $user, $ha['id'], $lat, $lon))) {
+                            
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
@@ -127,6 +135,7 @@ class APIController extends Controller {
                             return response()->json([
                                 'SUCCESS' => 'EVENT_FIRED'
                             ]);
+                        
                         }
                     }
                 }   
@@ -140,6 +149,7 @@ class APIController extends Controller {
         ]);
     }
 
+    //CHECK
     public function eventHEP(Request $request) {
         
         if($this->token != $request['token']){
@@ -148,6 +158,7 @@ class APIController extends Controller {
             ]);
         }
 
+        $address = $request['address'];
         $user = $request['user'];
         $h_id = $request['h_id'];
         $lat = $request['lat'];
@@ -203,17 +214,31 @@ class APIController extends Controller {
         $user = $request['user_id'];
         $h_id = $request['h_id'];
         $disease = $request['disease'];
+        $description = $request['description'];
+        $appointment_date = '2017-06-03 15:00:00';
 
-        if(event(new HospitalNearBy($user, $h_id, $disease)))
+        if(event(new HospitalNearBy($user, $h_id, $disease, $description))) {
+
+            $hnb = new HospitalEmergencyNearBy();
+            $hnb->u_id = $user;
+            $hnb->h_id = $h_id;
+            $hnb->disease = $disease;
+            $hnb->description = $description;
+            $hnb->appointment_date = $appointment_date;
+            $hnb->save();
+
             return response()->json([
                 'SUCCESS' => 'EVENT_FIRED'
             ]); 
+        }
+            
 
         return response()->json([
             'ERROR' => 'EVENT_FIRE_FAIL'
         ]);       
     }
 
+    //CHECK
     public function eventPF(Request $request){
 
         if($this->token != $request['token']){

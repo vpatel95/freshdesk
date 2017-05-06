@@ -19,14 +19,16 @@ class HospitalEmergencyPersonal implements ShouldBroadcast {
     public $lat;
     public $lon;
     public $self;
+    public $address;
 
-    public function __construct($user, $h_id, $lat, $lon, $self=false) {
+    public function __construct($user, $h_id, $lat, $lon, $self=false, $address) {
 
         $this->user = $user;
         $this->h_id = $h_id;
         $this->lat = $lat;
         $this->lon = $lon;
         $this->self = $self;
+        $this->address = $address;
     }
 
     /**

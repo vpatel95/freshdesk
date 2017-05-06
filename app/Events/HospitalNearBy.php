@@ -17,12 +17,14 @@ class HospitalNearBy implements ShouldBroadcast {
     public $user;
     public $h_id;
     public $disease;
+    public $description;
 
-    public function __construct($user, $h_id, $disease) {
+    public function __construct($user, $h_id, $disease, $description) {
 
         $this->user = $user;
         $this->h_id = $h_id;
         $this->disease = $disease;
+        $this->description = $description;
     }
 
     /**

@@ -276,13 +276,7 @@
 				type : 'POST',
 				url : '{{ route('hospital.emergency.personal') }}',
 				data : {
-					type : type,
-					address : address,
-					user : user,
-					lat : lat,
-					lon : lon,
-					h_id : h_id,
-					self : self
+					address : address
 				},
 				success : function(response) {
 					$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Personal</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p><b>Self</b> : ' + response.self + '</p></div></div>');
@@ -322,19 +316,8 @@
 		Echo.private('hospitalNearBy.' + {{ $user->id }})
 			.listen('HospitalNearBy', (e) => {
 				console.log(e);
-				$.ajax({
-					type : 'POST',
-					url : '{{ route('hospital.nearby') }}',
-					data : {
-						user : e.user,
-						h_id : e.h_id,
-						disease : e.disease
-					},
-					success : function(response) {
-						$('#nearby').append('<tr><td><strong><a href="hospital/appointment/' + response.id +'">' + response.user + '</a></strong><p>Disease : ' + response.disease
+				$('#nearby').append('<tr><td><strong><a href="hospital/appointment/' + response.id +'">' + response.user + '</a></strong><p>Disease : ' + response.disease
 						 + '</p><p>Appointment Date : ' + response.appointment + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>');
-					}
-				});
 			});
 	</script>
 @endpush

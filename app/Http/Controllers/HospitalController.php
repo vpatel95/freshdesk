@@ -22,20 +22,13 @@ class HospitalController extends Controller {
 		$user = $request['user'];
 		$h_id = $request['h_id'];
 		$disease = $request['disease'];
-		$data['test'] = 'NULL';
-		$nb = new HospitalEmergencyNearBy();
-		$nb->u_id = $user;
-		$nb->h_id = $h_id;
-		$nb->disease = $disease;
-		$nb->tests = json_encode($data);
-		$nb->appointment_date = '2017-06-03 15:00:00';
-		$nb->self = true;
-		$nb->save();
+		$description = $request['description'];
 
 		return response()->json([
 			'id' => $user,
 			'user' => User::find($user)->userDetail->name,
 			'disease' => $disease,
+			'description' => $description,
 			'appointment' => '2017-06-03 15:00:00'
 		]);
 	}

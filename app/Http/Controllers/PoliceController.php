@@ -19,7 +19,16 @@ class PoliceController extends Controller {
     	$latitude = $request['latitude'];
     	$longitude = $request['longitude'];
 
-    	
+    	$fir = new PoliceFir();
+        $fir->u_id = $u_id;
+        $fir->ps_id = $ps_id;
+        $fir->category = $category;
+        $fir->description = $description;
+        $fir->latitude = $latitude;
+        $fir->longitude = $longitude;
+        $fir->media = $media;
+        $fir->address = $address;
+        $fir->save();
 
         if($media === 'NULL')
 	        return response()->json([
