@@ -8,6 +8,7 @@ use App\Hospital;
 use App\Ambulance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +36,27 @@ class APIController extends Controller {
         $dist = rad2deg($dist);
         $km = $dist * 60 * 1.1515 * 1.609344;
         return $dist;
+    }
+
+    private function sortHospital($lat, $lon) {
+
+        $hos = Hospital::all();
+
+        if(sizeof($hos) == 0){
+            return response()->json([
+                'hospital' => 'NO_HOSPITAL_FOUND'
+            ]);
+        }
+
+        for ($i=0; $i < sizeof($hos); $i++) { 
+            $h[$i]['id'] = $hos[$i]['id'];
+            $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
+        }
+
+        $hc = collect($h)->sortBy('dist');
+        return response()->json([
+            'hospital' => $hc
+        ]);
     }
 
     public function eventHEA(Request $request) {
@@ -257,8 +279,9 @@ class APIController extends Controller {
             $h[$i]['rating'] = $hos[$i]['rating'];
         }
 
+        $hc = collect($h)->sortBy('dist');
         return response()->json([
-            'hospital' => $h
+            'hospital' => $hc
         ]);
     }
 
@@ -278,5 +301,24 @@ class APIController extends Controller {
             return response()->json([
                 'SUCCESS' => 'EVENT_FIRED'
             ]);
+    }
+
+    public function unoccupyAmbulance(Request $request) {
+
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $ambulance = $request['ambulance'];
+
+        $am = Ambulance::find($ambulance);
+        $am->occupied = false;
+        $am->save();
+
+        return response()->json([
+            'SUCCESS' => 'AMBULANCE_FREED'
+        ]);
     }
 }

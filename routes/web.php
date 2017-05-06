@@ -127,4 +127,8 @@ Route::prefix('api/android')->group(function(){
 	Route::post('/ambulance/location', [
 		'uses' => 'App\APIController@getAmbulanceLocation'
 	]);
+
+	Route::post('/ambulance/unoccupy', [
+		'uses' => 'App\APIController@unoccupyAmbulance'
+	]);
 });
