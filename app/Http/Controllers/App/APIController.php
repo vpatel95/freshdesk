@@ -102,27 +102,6 @@ class APIController extends Controller {
         return response()->json([
             'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
         ]);
-        /*$ambulance = Ambulance::where('h_id', $h_id)->where('occupied',false)->first();
-        if($ambulance == null)
-            return response()->json([
-                'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
-            ]);
-    	if(event(new HospitalEmergencyAccident($user, $h_id, $ps_id, $lat, $lon, $self))){
-            if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $h_id, $ambulance->id))){
-                if(event(new PoliceEmergencyAccident($ps_id, $user, $h_id, $lat, $lon))) {
-                    $am = Ambulance::find($ambulance->id);
-                    $am->occupied = true;
-                    $am->save();
-                    return response()->json([
-                        'SUCCESS' => 'EVENT_FIRED'
-                    ]);
-                }
-            }
-        }
-
-        return response()->json([
-            'ERROR' => 'EVENT_FIRE_FAIL'
-        ]);*/
     }
 
     public function eventHEP(Request $request) {
@@ -140,20 +119,24 @@ class APIController extends Controller {
         $self = $request['self'];
 
         $contact = UserDetail::find($user)->phone_no;
-        $ambulance = Ambulance::where('h_id', $h_id)->where('occupied',false)->first();
-        if($ambulance == null)
-            return response()->json([
-                'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
-            ]);
-        if(event(new HospitalEmergencyPersonal($user, $h_id, $lat, $lon, $self))){
-            if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $h_id, $ambulance->id))){
-                
-                $am = Ambulance::find($ambulance->id);
-                $am->occupied = true;
-                $am->save();
-                return response()->json([
-                   'SUCCESS' => 'EVENT_FIRED'
-                ]);
+        
+        $hc = $this->sortHospital($lat, $lon);
+        for ($i=0; $hc != null; $i++) { 
+            $ha = $hc->last();
+            if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
+                $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
+                if(event(new HospitalEmergencyPersonal($user, $ha['id'], $ps_id, $lat, $lon, $self))){
+                    if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
+                        $am = Ambulance::find($ambulance->id);
+                        $am->occupied = true;
+                        $am->save();
+                        return response()->json([
+                            'SUCCESS' => 'EVENT_FIRED'
+                        ]);                    
+                    }
+                }   
+            } else {
+                $hc->pop();
             }
         }
 
