@@ -49,12 +49,8 @@ class EmergencyController extends Controller {
 
 	public function policeEmergencyAccident(Request $request) {
 
-		$address = $request['address'];
 		$user = $request['notifier'];
 		$hospital = $request['hospital'];
-		$lat = $request['lat'];
-		$lon = $request['lon'];
-		$ps_id = $request['ps_id'];
 
 		
 

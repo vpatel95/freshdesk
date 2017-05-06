@@ -18,11 +18,12 @@ class CreatePoliceFirsTable extends Migration
             $table->bigInteger('u_id');
             $table->bigInteger('ps_id');
             $table->string('category');
+            $table->text('witness');
+            $table->text('accused');
             $table->text('description');
             $table->string('media');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('address');
+            $table->dateTime('date_time');
+            $table->string('location');
             $table->timestamps();
         });
 

@@ -6,6 +6,7 @@ use App\User;
 use App\UserDetail;
 use App\Hospital;
 use App\Ambulance;
+use App\PoliceFir;
 use App\PoliceStation;
 use App\HospitalEmergencyNearBy;
 use Illuminate\Http\Request;
@@ -245,12 +246,14 @@ class APIController extends Controller {
             ]);
         }
 
-        $user = $request['u_id'];
-        $police = $request['ps_id'];
+        $u_id = $request['u_id'];
+        $ps_id = PoliceStation::where('pincode', $request['pincode'])->first()->id;
         $category = $request['category'];
+        $date_time = $request['date_time'];
+        $location = $request['location'];
+        $accused = $request['accused'];
         $description = $request['description'];
-        $lat = $request['lat'];
-        $lon = $request['lon'];
+        $witness = $request['witness'];
 
         if($category === 'Lost & Found') {
             $file = $request->file('media');
@@ -263,17 +266,18 @@ class APIController extends Controller {
             $filename = 'NULL';
         }
 
-        if(event(new PoliceComplaints($user, $police, $category, $description, $filename, $lat, $lon))) {
+        if(event(new PoliceComplaints($u_id, $ps_id, $category, $description, $filename, $date_time, $location, $accused, $witness))) {
 
             $fir = new PoliceFir();
             $fir->u_id = $u_id;
             $fir->ps_id = $ps_id;
             $fir->category = $category;
+            $fir->date_time = $date_time;
+            $fir->location = $location;
+            $fir->accused = $accused;
             $fir->description = $description;
-            $fir->latitude = $latitude;
-            $fir->longitude = $longitude;
+            $fir->witness = $witness;
             $fir->media = $filename;
-            $fir->address = 'NULL';
             $fir->save();
 
             return response()->json([
@@ -286,7 +290,7 @@ class APIController extends Controller {
         ]); 
     }
 
-    public function getHospitalBySpeciality(Request $request) {
+    public function getHospitalByPrice(Request $request) {
         
         if($this->token != $request['token']){
             return response()->json([
@@ -295,7 +299,7 @@ class APIController extends Controller {
         }
 
         $sp = $request['specialization'];
-        $hs_sp = Hospital::where('specialization->sp',$sp)->get();
+        $hs_sp = Hospital::where('specialization->sp',$sp)->orderBy('price')->get();
 
         if(sizeof($hs_sp) == 0){
             return response()->json([

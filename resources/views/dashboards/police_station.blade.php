@@ -246,72 +246,44 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?key={{ config('app.google_api') }}"></script>
 
     <script type="text/javascript">
-        function returnGeoCodePEA(address, notifier, hospital, lat, lon, ps_id) {
-            $.ajax({
-                type : 'POST',
-                url : '{{ route('police.emergency.accident') }}',
-                data : {
-                    address : address,
-                    notifier : notifier,
-                    hospital : hospital,
-                    ps_id : ps_id,
-                    lat : lat,
-                    lon : lon
-                },
-                success : function(response) {
-                    $('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_1"><div class="panel-heading"><h4 class="panel-title">Emergency : Accident</h4></div><div class="panel-body-narrow dd_content"><p><b>Notifier</b> :' + response.notifier + '</p><p><b>Notifier Contact</b> : '+ response.notifier_contact +'</p><p><b>Hospital</b> : ' + response.hospital +'</p><p><b>Hospital Contact</b> : ' + response.hospital_contact + '</p><p><b>Hospital Address</b> : ' + response.hospital_address + '</p></div></div>');
-                }
-            });
-        }
-
         function returnGeoCodePF(location, user, police, category, description, media, latitude, longitude) {
-            $,ajax({
-                type : 'POST',
-                url : '{{ route('police.fir') }}',
-                data : {
-                    address : address,
-                    u_id : user,
-                    pd_id : police,
-                    category : category,
-                    description : description,
-                    media : media,
-                    latitude : latitude,
-                    longitude : longitude
-                },
-                success : function(response) {
-                    if(response.is_media)
-                        $('#fir').append('<tr><td><strong><a href="#">Category : ' + response.category + '</a></strong><p><b>Name</b> : ' + response.name + '</p><p><b>Description</b> : ' + response.description + '</p><p><b>Address</b> : ' + response.address + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>')
-                }
-            });
-        }
-
-        function getGeoCode(type, latitude, longitude, notifier, h_id, ps_id, category=null, description=null, media=null, latitude=null, longitude=null) {
-            var geocoder;
-            var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-            geocoder = new google.maps.Geocoder();
-            geocoder.geocode({'location': latlng}, function(results, status) {
-                if (results[0]) {
-                    var location = results[0].formatted_address;
-                } else {
-                    var location = 'N/A';
-                }
-                if(type === 'ea')
-                    returnGeoCodePEA(location, notifier, h_id, latitude, longitude, ps_id);
-                else if(type === 'fir')
-                    returnGeoCodePF(location, notifier, ps_id, category, description, media, latitude, longitude);
-            });
+            
         }
     </script>
     <script type="text/javascript">
         Echo.private('policeEmergencyAccident.' + {{ $user->id }})
             .listen('PoliceEmergencyAccident', (e) => {
                 console.log(e.id);
-                getGeoCode('ea', e.lat, e.lon, e.notifier, e.hospital, e.id);
+                $.ajax({
+                    type : 'POST',
+                    url : '{{ route('police.emergency.accident') }}',
+                    data : {
+                        notifier : notifier,
+                        hospital : hospital
+                    },
+                    success : function(response) {
+                        $('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_1"><div class="panel-heading"><h4 class="panel-title">Emergency : Accident</h4></div><div class="panel-body-narrow dd_content"><p><b>Notifier</b> :' + response.notifier + '</p><p><b>Notifier Contact</b> : '+ response.notifier_contact +'</p><p><b>Hospital</b> : ' + response.hospital +'</p><p><b>Hospital Contact</b> : ' + response.hospital_contact + '</p><p><b>Hospital Address</b> : ' + response.hospital_address + '</p></div></div>');
+                    }
+                });
             });
         Echo.private('policeFir.' + {{ $user->id }})
             .listen('PoliceComplaints', (e) => {
                 console.log(e);
-                getGeoCode('fir', e.lat, e.lon, e.notifier, e.hospital, e.id);
+                $.ajax({
+                    type : 'POST',
+                    url : '{{ route('police.fir') }}',
+                    data : {
+                        address : address,
+                        u_id : user,
+                        category : category,
+                        description : description,
+                        media : media
+                    },
+                    success : function(response) {
+                        if(response.is_media)
+                            $('#fir').append('<tr><td><strong><a href="#">Category : ' + response.category + '</a></strong><p><b>Name</b> : ' + response.name + '</p><p><b>Description</b> : ' + response.description + '</p><p><b>Address</b> : ' + response.address + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>')
+                    }
+                });
             });
     </script>
 @endpush

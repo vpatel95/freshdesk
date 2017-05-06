@@ -314,8 +314,21 @@
 		Echo.private('hospitalNearBy.' + {{ $user->id }})
 			.listen('HospitalNearBy', (e) => {
 				console.log(e);
-				$('#nearby').append('<tr><td><strong><a href="hospital/appointment/' + response.id +'">' + response.user + '</a></strong><p>Disease : ' + response.disease
+				$.ajax({
+					type : 'POST',
+					url : '{{ route('hospital.emergency.personal') }}',
+					data : {
+						user : e.user,
+						h_id : e.h_id,
+						disease : e.disease,
+						description : e.description
+					},
+					success : function(response) {
+						$('#nearby').append('<tr><td><strong><a href="hospital/appointment/' + response.id +'">' + response.user + '</a></strong><p>Disease : ' + response.disease
 						 + '</p><p>Appointment Date : ' + response.appointment + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>');
+					}
+				});
+				
 			});
 	</script>
 @endpush

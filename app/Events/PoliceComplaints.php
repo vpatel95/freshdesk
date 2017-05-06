@@ -18,18 +18,22 @@ class PoliceComplaints implements ShouldBroadcast {
     public $category;
     public $description;
     public $media;
-    public $latitude;
-    public $longitude;
+    public $date_time;
+    public $location;
+    public $accused;
+    public $witness;
 
-    public function __construct($user, $police, $category, $description, $media, $latitude, $longitude) {
+    public function __construct($user, $police, $category, $description, $media, $date_time, $location, $accused, $witness) {
 
         $this->user = $user;
         $this->police = $police;
         $this->category = $category;
         $this->description = $description;
         $this->media = $media;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+        $this->date_time = $date_time;
+        $this->location = $location;
+        $this->accused = $accused;
+        $this->witness = $witness;
         
     }
 
