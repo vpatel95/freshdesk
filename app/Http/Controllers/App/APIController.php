@@ -144,12 +144,12 @@ class APIController extends Controller {
         $h_id = $request['h_id'];
         $lat = $request['lat'];
         $lon = $request['lon'];
-        $self = false;
+        $self = $request['self'] === 'true' ? true : false;
 
         $contact = UserDetail::find($user)->phone_no;
         
         $hc = $this->sortHospital($lat, $lon);
-        for ($i=0; $hc != null; $i++) { 
+        for ($i=0; sizeof($hc)>0; $i++) { 
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
