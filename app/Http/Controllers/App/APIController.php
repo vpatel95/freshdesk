@@ -17,7 +17,6 @@ use App\Events\HospitalNearBy;
 use App\Events\PoliceComplaints;
 use App\Events\AmbulanceRequested;
 use App\Events\PoliceEmergencyAccident;
-//use App\Events\HospitalEmergencyAccident;
 use App\Events\HospitalEmergencyPersonal;
 
 class APIController extends Controller {
@@ -154,13 +153,13 @@ class APIController extends Controller {
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new App\Events\HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
+                if(event(new \App\Events\HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         $am = Ambulance::find($ambulance->id);
                         $am->occupied = true;
                         $am->save();
 
-                        $hea = new App\HospitalEmergencyAccident();
+                        $hea = new \App\HospitalEmergencyAccident();
                         $hea->type = 'personal';
                         $hea->u_id = $user;
                         $hea->h_id = $ha['id'];
