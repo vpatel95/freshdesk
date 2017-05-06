@@ -24,17 +24,6 @@ class EmergencyController extends Controller {
 		$h_id = $request['h_id'];
 		$self = $request['self'] === 'true' ? true : false;
 
-		$hea = new HospitalEmergencyAccident();
-		$hea->type = $type;
-		$hea->u_id = $user;
-		$hea->h_id = $h_id;
-		$hea->ps_id = $ps_id;
-		$hea->latitude = $lat;
-		$hea->longitude = $lon;
-		$hea->address = $address;
-		$hea->self = $self;
-		$hea->save();
-
 		$ps = PoliceStation::find($ps_id);
 		$ps_add = $ps->address_line_1 . ', ' . $ps->address_line_2 . ', ' . $ps->city;
 
@@ -58,15 +47,7 @@ class EmergencyController extends Controller {
 		$h_id = $request['h_id'];
 		$self = $request['self'] === 'true' ? true : false;
 
-		$hea = new HospitalEmergencyAccident();
-		$hea->type = $type;
-		$hea->u_id = $user;
-		$hea->h_id = $h_id;
-		$hea->latitude = $lat;
-		$hea->longitude = $lon;
-		$hea->address = $address;
-		$hea->self = $self;
-		$hea->save();
+		
 
 		return response()->json([
 		    'user' => User::find($user)->userDetail->name,

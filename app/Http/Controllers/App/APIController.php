@@ -7,6 +7,7 @@ use App\UserDetail;
 use App\Hospital;
 use App\Ambulance;
 use App\PoliceStation;
+use App\HospitalEmergencyAccident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -105,6 +106,18 @@ class APIController extends Controller {
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
+
+                            $hea = new App\HospitalEmergencyAccident();
+                            $hea->type = 'accident';
+                            $hea->u_id = $user;
+                            $hea->h_id = $ha['id'];
+                            $hea->ps_id = $ps_id['id'];
+                            $hea->latitude = $lat;
+                            $hea->longitude = $lon;
+                            $hea->address = 'NULL';
+                            $hea->self = $self;
+                            $hea->save();
+
                             return response()->json([
                                 'SUCCESS' => 'EVENT_FIRED'
                             ]);
@@ -147,6 +160,17 @@ class APIController extends Controller {
                         $am = Ambulance::find($ambulance->id);
                         $am->occupied = true;
                         $am->save();
+
+                        $hea = new HospitalEmergencyAccident();
+                        $hea->type = 'personal';
+                        $hea->u_id = $user;
+                        $hea->h_id = $ha['id'];
+                        $hea->latitude = $lat;
+                        $hea->longitude = $lon;
+                        $hea->address = 'NULL';
+                        $hea->self = $self;
+                        $hea->save();
+
                         return response()->json([
                             'SUCCESS' => 'EVENT_FIRED'
                         ]);                    
