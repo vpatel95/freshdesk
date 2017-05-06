@@ -102,7 +102,7 @@ class APIController extends Controller {
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
                 
-                if(event(new \App\Events\HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
+                if(event(new \App\Events\HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self, $address))){
                     
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         
@@ -172,7 +172,7 @@ class APIController extends Controller {
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new \App\Events\HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
+                if(event(new \App\Events\HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self, $address))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         $am = Ambulance::find($ambulance->id);
                         $am->occupied = true;
