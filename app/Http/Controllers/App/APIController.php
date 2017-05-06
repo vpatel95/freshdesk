@@ -119,7 +119,7 @@ class APIController extends Controller {
                             $hea->ps_id = $ps_id['id'];
                             $hea->latitude = $lat;
                             $hea->longitude = $lon;
-                            $hea->address = 'NULL';
+                            $hea->address = $address;
                             $hea->self = $self;
                             $hea->save();
 
@@ -129,7 +129,7 @@ class APIController extends Controller {
                             $pea->latitude = $lat;
                             $pea->longitude = $lon;
                             $pea->ps_id = $ps_id['id'];
-                            $pea->accident_address = 'NULL';
+                            $pea->accident_address = $address;
                             $pea->save();
 
                             return response()->json([
@@ -184,7 +184,7 @@ class APIController extends Controller {
                         $hea->h_id = $ha['id'];
                         $hea->latitude = $lat;
                         $hea->longitude = $lon;
-                        $hea->address = 'NULL';
+                        $hea->address = $address;
                         $hea->self = $self;
                         $hea->save();
 

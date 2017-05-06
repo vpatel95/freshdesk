@@ -250,38 +250,11 @@
 
 	<script type="text/javascript">
 		function returnGeoCodeHEA(type, address, user, lat, lon, ps_id, self, h_id) {
-			$.ajax({
-				type : 'POST',
-				url : '{{ route('hospital.emergency.accident') }}',
-				data : {
-					type : type,
-					address : address,
-					user : user,
-					lat : lat,
-					lon : lon,
-					h_id : h_id,
-					ps_id : ps_id,
-					self : self
-				},
-				success : function(response) {
-					if(response.address === 'N/A')
-						toastr['warning']('Please call the Notifier Immediately','Empty Address');
-					$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Accident</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Police Informed</b> : ' + response.police + '</p><p><b>Police Contact</b> : ' + response.ps_contact + '</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p><b>Self</b> : ' + response.self + '</p></div></div>');
-				}
-			});
+			
 		}
 
 		function returnGeoCodeHEP(type, address, user, lat, lon, self, h_id) {
-			$.ajax({
-				type : 'POST',
-				url : '{{ route('hospital.emergency.personal') }}',
-				data : {
-					address : address
-				},
-				success : function(response) {
-					$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Personal</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p><b>Self</b> : ' + response.self + '</p></div></div>');
-				}
-			});
+			
 		}
 
 		function getGeoCode(type, latitude, longitude, user, h_id, ps_id, self) {
@@ -306,12 +279,37 @@
 		Echo.private('hospitalEmergencyAccident.' + {{ $user->id }})
 		    .listen('HospitalEmergencyAccident', (e) => {
 		        console.log(e);
-		        getGeoCode('accident', e.lat, e.lon, e.user, e.h_id, e.ps_id, e.self);
+		        $.ajax({
+					type : 'POST',
+					url : '{{ route('hospital.emergency.accident') }}',
+					data : {
+						address : address,
+						user : user,
+						h_id : h_id,
+						ps_id : ps_id
+					},
+					success : function(response) {
+						if(response.address === 'N/A')
+							toastr['warning']('Please call the Notifier Immediately','Empty Address');
+						$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Accident</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Police Informed</b> : ' + response.police + '</p><p><b>Police Contact</b> : ' + response.ps_contact + '</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p><p></div></div>');
+					}
+				});
 		    });
 		Echo.private('hospitalEmergencyPersonal.' + {{ $user->id }})
 			.listen('HospitalEmergencyPersonal', (e) => {
 				console.log(e);
-				getGeoCode('personal', e.lat, e.lon, e.user, e.h_id, e.self);
+				$.ajax({
+					type : 'POST',
+					url : '{{ route('hospital.emergency.personal') }}',
+					data : {
+						address : e.address,
+						user : e.user,
+						h_id : e.h_id
+					},
+					success : function(response) {
+						$('#dd_column_01').append('<div class="panel panel-danger dd_widget" id="dd_panel_03"><div class="panel-heading"><h4 class="panel-title">Emergency : Personal</h4></div><div class="panel-body-narrow dd_content"><p><b>Address</b> : ' + response.address +'</p><p><b>Notifier</b> : ' + response.user + '</p><p><b>Notifier Contact</b> : ' + response.user_contact + '</p></div></div>');
+					}
+				});
 			});
 		Echo.private('hospitalNearBy.' + {{ $user->id }})
 			.listen('HospitalNearBy', (e) => {

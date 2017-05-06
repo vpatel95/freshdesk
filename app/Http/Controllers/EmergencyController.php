@@ -13,16 +13,13 @@ use Illuminate\Http\Response;
 
 class EmergencyController extends Controller {
 
+	//DONE CHECKING-LEFT
 	public function hospitalEmergencyAccident(Request $request) {
 
-		$type = $request['type'];
-		$address = $request['address'];
 		$user = $request['user'];
-		$lat = $request['lat'];
-		$lon = $request['lon'];
 		$ps_id = $request['ps_id'];
 		$h_id = $request['h_id'];
-		$self = $request['self'] === 'true' ? true : false;
+		$address = $request['address'];
 
 		$ps = PoliceStation::find($ps_id);
 		$ps_add = $ps->address_line_1 . ', ' . $ps->address_line_2 . ', ' . $ps->city;
@@ -32,28 +29,22 @@ class EmergencyController extends Controller {
 		    'user_contact' => User::find($user)->userDetail->phone_no,
 		    'police' => $ps_add,
 		    'ps_contact' => $ps->contact,
-		    'address' => $address,
-		    'self' => $self
+		    'address' => $address
 		]);
 	}
 
 	public function hospitalEmergencyPersonal(Request $request) {
 		
-		$type = $request['type'];
 		$address = $request['address'];
 		$user = $request['user'];
-		$lat = $request['lat'];
-		$lon = $request['lon'];
 		$h_id = $request['h_id'];
-		$self = $request['self'] === 'true' ? true : false;
 
 		
 
 		return response()->json([
 		    'user' => User::find($user)->userDetail->name,
 		    'user_contact' => User::find($user)->userDetail->phone_no,
-		    'address' => $address,
-		    'self' => $self
+		    'address' => $address
 		]);
 	}
 
