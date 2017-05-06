@@ -58,7 +58,7 @@ class APIController extends Controller {
 
     private function sortPoliceStation($lat, $lon) {
 
-        $ps = Policestation::all();
+        $ps = PoliceStation::all();
 
         if(sizeof($ps) == 0) {
             return response()->json([
