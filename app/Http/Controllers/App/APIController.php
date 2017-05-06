@@ -144,7 +144,7 @@ class APIController extends Controller {
         $h_id = $request['h_id'];
         $lat = $request['lat'];
         $lon = $request['lon'];
-        $self = $request['self'];
+        $self = false;
 
         $contact = UserDetail::find($user)->phone_no;
         
