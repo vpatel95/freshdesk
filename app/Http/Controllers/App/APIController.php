@@ -6,6 +6,7 @@ use App\User;
 use App\UserDetail;
 use App\Hospital;
 use App\Ambulance;
+use App\PoliceStation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
