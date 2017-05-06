@@ -53,7 +53,7 @@ class APIController extends Controller {
             $h[$i]['dist'] = $this->getDistance($lat, $hos[$i]['latitude'],$lon, $hos[$i]['longitude']);
         }
 
-        $hc = collect($h)->sortBy('dist');
+        $hc = collect($h)->sortByDesc('dist');
         return $hc;
         /*return response()->json([
             'hospital' => $hc
