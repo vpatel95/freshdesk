@@ -85,7 +85,6 @@ Route::prefix('police')->group(function() {
 	]);
 });
 
-
 Route::prefix('api/android')->group(function(){
 	
 	Route::post('/login',[

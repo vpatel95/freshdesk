@@ -26,7 +26,6 @@ class APIController extends Controller {
     public function __construct() {
         
         $this->middleware('guest');
-    
     }
 
     private function getDistance($lat1, $lat2, $lon1, $lon2) {
@@ -55,9 +54,25 @@ class APIController extends Controller {
 
         $hc = collect($h)->sortByDesc('dist');
         return $hc;
-        /*return response()->json([
-            'hospital' => $hc
-        ]);*/
+    }
+
+    private function sortPoliceStation($lat, $lon) {
+
+        $ps = Policestation::all();
+
+        if(sizeof($ps) == 0) {
+            return response()->json([
+                'police_station' => 'NO_POLICE_FOUND'
+            ]);
+        }
+
+        for ($i=0; $i < sizeof($ps); $i++) { 
+            $p[$i]['id'] = $ps[$i]['id'];
+            $p[$i]['dist'] = $this->getDistance($lat, $ps[$i]['latitude'], $lon, $ps[$i]['longitude']);
+        }
+
+        $pc = collect($p)->sortByDesc('dist');
+        return $pc;
     }
 
     public function eventHEA(Request $request) {
@@ -69,22 +84,23 @@ class APIController extends Controller {
         }
 
     	$user = $request['user'];
-        $h_id = $request['h_id'];
-        $ps_id = $request['ps_id'];
         $lat = $request['lat'];
         $lon = $request['lon'];
         $self = $request['self'];
 
         $contact = UserDetail::find($user)->phone_no;
+
+        $pc = $this->sortPoliceStation($lat, $lon);
+        $ps_id = $pc->last();
         
         $hc = $this->sortHospital($lat, $lon);
         for ($i=0; $hc != null; $i++) { 
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new HospitalEmergencyAccident($user, $ha['id'], $ps_id, $lat, $lon, $self))){
+                if(event(new HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
-                        if(event(new PoliceEmergencyAccident($ps_id, $user, $ha['id'], $lat, $lon))) {
+                        if(event(new PoliceEmergencyAccident($ps_id['id'], $user, $ha['id'], $lat, $lon))) {
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
@@ -141,7 +157,7 @@ class APIController extends Controller {
         }
 
         return response()->json([
-            'ERROR' => 'EVENT_FIRE_FAIL'
+            'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
         ]);
     }
 
@@ -201,8 +217,7 @@ class APIController extends Controller {
 
         return response()->json([
             'ERROR' => 'EVENT_FIRE_FAIL'
-        ]);
-        
+        ]); 
     }
 
     public function getHospitalBySpeciality(Request $request) {
@@ -257,8 +272,7 @@ class APIController extends Controller {
 
         return response()->json([
             'hospital' => $hospital
-        ]);
-        
+        ]);   
     }
 
     public function getHospitalByDistance(Request $request) {
