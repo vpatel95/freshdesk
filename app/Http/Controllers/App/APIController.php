@@ -80,7 +80,7 @@ class APIController extends Controller {
         $hc = $this->sortHospital($lat, $lon);
 
         $ha = $hc->toArray();
-        dd($ha);
+        dd($ha[0]);
         for ($i=0; $i < sizeof($ha); $i++) { 
             if(Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->first();                    
