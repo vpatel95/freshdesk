@@ -7,7 +7,6 @@ use App\UserDetail;
 use App\Hospital;
 use App\Ambulance;
 use App\PoliceStation;
-use App\HospitalEmergencyAccident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -18,7 +17,7 @@ use App\Events\HospitalNearBy;
 use App\Events\PoliceComplaints;
 use App\Events\AmbulanceRequested;
 use App\Events\PoliceEmergencyAccident;
-use App\Events\HospitalEmergencyAccident;
+//use App\Events\HospitalEmergencyAccident;
 use App\Events\HospitalEmergencyPersonal;
 
 class APIController extends Controller {
@@ -88,7 +87,7 @@ class APIController extends Controller {
     	$user = $request['user'];
         $lat = $request['lat'];
         $lon = $request['lon'];
-        $self = $request['self'];
+        $self = $request['self'] === 'true' ? true : false;
 
         $contact = UserDetail::find($user)->phone_no;
 
@@ -100,14 +99,14 @@ class APIController extends Controller {
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
+                if(event(new \App\Events\HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         if(event(new PoliceEmergencyAccident($ps_id['id'], $user, $ha['id'], $lat, $lon))) {
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
 
-                            $hea = new App\HospitalEmergencyAccident();
+                            $hea = new \App\HospitalEmergencyAccident();
                             $hea->type = 'accident';
                             $hea->u_id = $user;
                             $hea->h_id = $ha['id'];
@@ -155,13 +154,13 @@ class APIController extends Controller {
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
+                if(event(new App\Events\HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         $am = Ambulance::find($ambulance->id);
                         $am->occupied = true;
                         $am->save();
 
-                        $hea = new HospitalEmergencyAccident();
+                        $hea = new App\HospitalEmergencyAccident();
                         $hea->type = 'personal';
                         $hea->u_id = $user;
                         $hea->h_id = $ha['id'];
