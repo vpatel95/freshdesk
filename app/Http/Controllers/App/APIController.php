@@ -79,14 +79,13 @@ class APIController extends Controller {
         
         $hc = $this->sortHospital($lat, $lon);
 
-        $ha = $hc->toArray();
-        dd($hc->first());
-        for ($i=0; $i < sizeof($ha); $i++) { 
-            if(Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->exists()) {
-                $ambulance = Ambulance::where('h_id', $ha[$i]['id'])->where('occupied',false)->first();                    
-                if(event(new HospitalEmergencyAccident($user, $ha[$i]['id'], $ps_id, $lat, $lon, $self))){
-                    if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha[$i]['id'], $ambulance->id))){
-                        if(event(new PoliceEmergencyAccident($ps_id, $user, $ha[$i]['id'], $lat, $lon))) {
+        for ($i=0; $i < sizeof($hc); $i++) { 
+            $ha = $hc->last();
+            if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
+                $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
+                if(event(new HospitalEmergencyAccident($user, $ha['id'], $ps_id, $lat, $lon, $self))){
+                    if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
+                        if(event(new PoliceEmergencyAccident($ps_id, $user, $ha['id'], $lat, $lon))) {
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
