@@ -14,10 +14,18 @@ class FireStation
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    
-    public function __construct()
-    {
-        //
+    public $user;
+    public $fire;
+    public $lat;
+    public $lon;
+    public $address;
+
+    public function __construct($user, $fire, $lat, $lon, $address) {
+        $this->user = $user;
+        $this->fire = $fire;
+        $this->lat = $lat;
+        $this->lon = $lon;
+        $this->address = $address;
     }
 
     /**
@@ -27,6 +35,6 @@ class FireStation
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('fireEmergency.'.$this->fire);
     }
 }

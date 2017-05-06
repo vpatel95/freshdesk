@@ -111,6 +111,10 @@ Route::prefix('api/android')->group(function(){
 		'uses' => 'App\APIController@eventHNB'
 	]);
 
+	Route::post('/event/fe', [
+		'uses' => 'App\APIController@eventFE'
+	]);
+
 	Route::post('/hospital/specialization', [
 		'uses' => 'App\APIController@getHospitalBySpeciality'
 	]);

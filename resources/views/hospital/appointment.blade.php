@@ -63,7 +63,7 @@
 				</div>
 				<div class="row invoice_top">
 					<div class="col-sm-10">
-						<h2 class="heading_lg">Appointment #12023/12/R1</h2>
+						<h2 class="heading_lg">Appointment #{{ $appointment->id.'/'.$appointment->u_id}}</h2>
 						<h2 class="heading_lg_sub">Order  #16328</h2>
 						<p>Date: <span class="text-muted">12/11/2013</span></p>
 						<p>Due By: <span class="text-danger">26/11/2013</span></p>

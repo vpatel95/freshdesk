@@ -237,6 +237,41 @@ class APIController extends Controller {
         ]);       
     }
 
+    public function eventFE(Request $request) {
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $user = $request['user'];
+        $pin = $request['pincode'];
+        $fire = \App\FireStation::where('pincode',$pin)->first();
+        $f_id = $fire->id;
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+        $address = $request['location'];
+
+        if(event(new \App\Events\FireStation($user, $f_id, $lat, $lon, $address))) {
+            $fe = new \App\FireEmergency();
+            $fe->f_id = $f_id;
+            $fe->u_id = $user;
+            $fe->latitude = $lat;
+            $fe->longitude = $lon;
+            $fe->address = $address;
+            $fe->save();
+            
+            return response()->json([
+               'SUCCESS' => 'EVENT_FIRED'
+            ]); 
+        }
+            
+
+        return response()->json([
+            'ERROR' => 'EVENT_FIRE_FAIL'
+        ]);       
+    }
+
     //CHECK
     public function eventPF(Request $request){
 
