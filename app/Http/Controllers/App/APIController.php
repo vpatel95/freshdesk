@@ -125,7 +125,7 @@ class APIController extends Controller {
             $ha = $hc->last();
             if(Ambulance::where('h_id', $ha['id'])->where('occupied',false)->exists()) {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
-                if(event(new HospitalEmergencyPersonal($user, $ha['id'], $ps_id, $lat, $lon, $self))){
+                if(event(new HospitalEmergencyPersonal($user, $ha['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
                         $am = Ambulance::find($ambulance->id);
                         $am->occupied = true;
