@@ -137,6 +137,12 @@ class APIController extends Controller {
 
     public function eventPF(Request $request){
 
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
         $user = $request['u_id'];
         $police = $request['ps_id'];
         $category = $request['category'];
@@ -254,5 +260,23 @@ class APIController extends Controller {
         return response()->json([
             'hospital' => $h
         ]);
+    }
+
+    public function getAmbulanceLocation(Request $request) {
+
+        if($this->token != $request['token']){
+            return response()->json([
+                'ERROR' => 'TOKEN_MISMATCH'
+            ]);
+        }
+
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+        $ambulance = $request['ambulance'];
+
+        if(event(new AmbulanceRequested(null, null, $lat, $lon, null, $ambulance)))
+            return response()->json([
+                'SUCCESS' => 'EVENT_FIRED'
+            ]);
     }
 }

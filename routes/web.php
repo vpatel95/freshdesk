@@ -123,4 +123,8 @@ Route::prefix('api/android')->group(function(){
 	Route::post('/hospital/distance', [
 		'uses' => 'App\APIController@getHospitalByDistance'
 	]);
+
+	Route::post('/ambulance/location', [
+		'uses' => 'App\APIController@getAmbulanceLocation'
+	]);
 });
