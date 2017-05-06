@@ -66,14 +66,7 @@ class EmergencyController extends Controller {
 		$lon = $request['lon'];
 		$ps_id = $request['ps_id'];
 
-		$pea = new PoliceEmergencyAccident();
-		$pea->u_id = $user;
-		$pea->h_id = $hospital;
-		$pea->latitude = $lat;
-		$pea->longitude = $lon;
-		$pea->ps_id = $ps_id;
-		$pea->accident_address = $address;
-		$pea->save();
+		
 
 		$h = Hospital::find($hospital);
 

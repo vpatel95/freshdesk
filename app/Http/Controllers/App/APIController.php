@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Events\HospitalNearBy;
 use App\Events\PoliceComplaints;
 use App\Events\AmbulanceRequested;
-use App\Events\PoliceEmergencyAccident;
 use App\Events\HospitalEmergencyPersonal;
 
 class APIController extends Controller {
@@ -100,7 +99,7 @@ class APIController extends Controller {
                 $ambulance = Ambulance::where('h_id', $ha['id'])->where('occupied',false)->first();                    
                 if(event(new \App\Events\HospitalEmergencyAccident($user, $ha['id'], $ps_id['id'], $lat, $lon, $self))){
                     if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $ha['id'], $ambulance->id))){
-                        if(event(new PoliceEmergencyAccident($ps_id['id'], $user, $ha['id'], $lat, $lon))) {
+                        if(event(new \App\Events\PoliceEmergencyAccident($ps_id['id'], $user, $ha['id'], $lat, $lon))) {
                             $am = Ambulance::find($ambulance->id);
                             $am->occupied = true;
                             $am->save();
@@ -115,6 +114,15 @@ class APIController extends Controller {
                             $hea->address = 'NULL';
                             $hea->self = $self;
                             $hea->save();
+
+                            $pea = new \App\PoliceEmergencyAccident();
+                            $pea->u_id = $user;
+                            $pea->h_id = $ha['id'];
+                            $pea->latitude = $lat;
+                            $pea->longitude = $lon;
+                            $pea->ps_id = $ps_id['id'];
+                            $pea->accident_address = 'NULL';
+                            $pea->save();
 
                             return response()->json([
                                 'SUCCESS' => 'EVENT_FIRED'
@@ -233,6 +241,18 @@ class APIController extends Controller {
         }
 
         if(event(new PoliceComplaints($user, $police, $category, $description, $filename, $lat, $lon))) {
+
+            $fir = new PoliceFir();
+            $fir->u_id = $u_id;
+            $fir->ps_id = $ps_id;
+            $fir->category = $category;
+            $fir->description = $description;
+            $fir->latitude = $latitude;
+            $fir->longitude = $longitude;
+            $fir->media = $filename;
+            $fir->address = 'NULL';
+            $fir->save();
+
             return response()->json([
                 'SUCCESS' => 'RECEIVED_FIR'
             ]);
