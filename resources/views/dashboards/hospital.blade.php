@@ -134,6 +134,7 @@
 													<a href="{{ route('hospital.appointment', $hnb->u_id) }}">{{ App\UserDetail::find($hnb->u_id)->name }}</a>
 												</strong>
 												<p>Disease : {{ $hnb->disease }}</p>
+												<p>Description : {{ $hnb->description }}</p>
 												<p>Appointment Date : {{ $hnb->appointment_date }}</p>
 											</td>
 											<td><span class="label label-info">23 Nov</span></td>

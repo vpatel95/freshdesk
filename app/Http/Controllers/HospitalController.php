@@ -34,7 +34,9 @@ class HospitalController extends Controller {
 	}
 
 	public function getIndividualAppointment($id) {
-		return view('hospital.appointment');
+		return view('hospital.appointment', [
+			'appointment' => HospitalEmergencyNearBy::all()->where('h_id',Auth::user()->id)
+		]);
 	}
     
 }

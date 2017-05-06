@@ -214,7 +214,7 @@ class APIController extends Controller {
         $h_id = $request['h_id'];
         $disease = $request['disease'];
         $description = $request['description'];
-        $appointment_date = '2017-06-03 15:00:00';
+        $appointment_date =  $request['appointment_date']; //'2017-06-03 15:00:00';
 
         if(event(new HospitalNearBy($user, $h_id, $disease, $description))) {
 
