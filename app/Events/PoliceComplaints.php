@@ -10,18 +10,27 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PoliceComplaints
-{
+class PoliceComplaints implements ShouldBroadcast {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    public $user;
+    public $police;
+    public $category;
+    public $description;
+    public $media;
+    public $latitude;
+    public $longitude;
+
+    public function __construct($user, $police, $category, $description, $media, $latitude, $longitude) {
+
+        $this->user = $user;
+        $this->police = $police;
+        $this->category = $category;
+        $this->description = $description;
+        $this->media = $media;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        
     }
 
     /**
@@ -31,6 +40,6 @@ class PoliceComplaints
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('policeFir.'.$this->police);
     }
 }

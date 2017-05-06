@@ -9,7 +9,10 @@ use App\Ambulance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use App\Events\HospitalNearBy;
+use App\Events\PoliceComplaints;
 use App\Events\AmbulanceRequested;
 use App\Events\PoliceEmergencyAccident;
 use App\Events\HospitalEmergencyAccident;
@@ -87,16 +90,20 @@ class APIController extends Controller {
         $lon = $request['lon'];
         $self = $request['self'];
 
-        $contact = UserDetail::find($user)->phone_no;   
+        $contact = UserDetail::find($user)->phone_no;
         $ambulance = Ambulance::where('h_id', $h_id)->where('occupied',false)->first();
-
+        if($ambulance == null)
+            return response()->json([
+                'ERROR' => 'AMBULANCE_NOT_AVAILABLE'
+            ]);
         if(event(new HospitalEmergencyPersonal($user, $h_id, $lat, $lon, $self))){
             if(event(new AmbulanceRequested($user, $contact, $lat, $lon, $h_id, $ambulance->id))){
+                
                 $am = Ambulance::find($ambulance->id);
                 $am->occupied = true;
                 $am->save();
                 return response()->json([
-                    'SUCCESS' => 'EVENT_FIRED'
+                   'SUCCESS' => 'EVENT_FIRED'
                 ]);
             }
         }
@@ -129,12 +136,35 @@ class APIController extends Controller {
     }
 
     public function eventPF(Request $request){
-        $file = $request->file('media');
-        $filename = $request['filename'];
 
-        if($file) {
-            Storage::disk('local')->put($filename, File::get($file));
+        $user = $request['u_id'];
+        $police = $request['ps_id'];
+        $category = $request['category'];
+        $description = $request['description'];
+        $lat = $request['lat'];
+        $lon = $request['lon'];
+
+        if($category === 'Lost & Found') {
+            $file = $request->file('media');
+            $filename = $request['filename'].'.png';
+
+            if($file) {
+                Storage::disk('local')->put($filename, File::get($file));
+            } 
+        } else {
+            $filename = 'NULL';
         }
+
+        if(event(new PoliceComplaints($user, $police, $category, $description, $filename, $lat, $lon))) {
+            return response()->json([
+                'SUCCESS' => 'RECEIVED_FIR'
+            ]);
+        }
+
+        return response()->json([
+            'ERROR' => 'EVENT_FIRE_FAIL'
+        ]);
+        
     }
 
     public function getHospitalBySpeciality(Request $request) {

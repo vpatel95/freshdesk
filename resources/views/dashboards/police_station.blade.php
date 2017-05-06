@@ -123,7 +123,7 @@
                         </div>
                         <div class="dd_content">
                             <table class="table">
-                                <tbody id="nearby">
+                                <tbody id="fir">
                                     
                                         <tr>
                                             <td>
@@ -264,7 +264,28 @@
             });
         }
 
-        function getGeoCode(latitude, longitude, notifier, h_id, ps_id) {
+        function returnGeoCodePF(location, user, police, category, description, media, latitude, longitude) {
+            $,ajax({
+                type : 'POST',
+                url : '{{ route('police.fir') }}',
+                data : {
+                    address : address,
+                    u_id : user,
+                    pd_id : police,
+                    category : category,
+                    description : description,
+                    media : media,
+                    latitude : latitude,
+                    longitude : longitude
+                },
+                success : function(response) {
+                    if(response.is_media)
+                        $('#fir').append('<tr><td><strong><a href="#">Category : ' + response.category + '</a></strong><p><b>Name</b> : ' + response.name + '</p><p><b>Description</b> : ' + response.description + '</p><p><b>Address</b> : ' + response.address + '</p></td><td><span class="label label-info">23 Nov</span></td></tr>')
+                }
+            });
+        }
+
+        function getGeoCode(type, latitude, longitude, notifier, h_id, ps_id, category=null, description=null, media=null, latitude=null, longitude=null) {
             var geocoder;
             var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
             geocoder = new google.maps.Geocoder();
@@ -274,7 +295,10 @@
                 } else {
                     var location = 'N/A';
                 }
-                returnGeoCodePEA(location, notifier, h_id, latitude, longitude, ps_id);
+                if(type === 'ea')
+                    returnGeoCodePEA(location, notifier, h_id, latitude, longitude, ps_id);
+                else if(type === 'fir')
+                    returnGeoCodePF(location, notifier, ps_id, category, description, media, latitude, longitude);
             });
         }
     </script>
@@ -282,7 +306,12 @@
         Echo.private('policeEmergencyAccident.' + {{ $user->id }})
             .listen('PoliceEmergencyAccident', (e) => {
                 console.log(e.id);
-                getGeoCode(e.lat, e.lon, e.notifier, e.hospital, e.id);
+                getGeoCode('ea', e.lat, e.lon, e.notifier, e.hospital, e.id);
+            });
+        Echo.private('policeFir.' + {{ $user->id }})
+            .listen('PoliceComplaints', (e) => {
+                console.log(e);
+                getGeoCode('fir', e.lat, e.lon, e.notifier, e.hospital, e.id);
             });
     </script>
 @endpush

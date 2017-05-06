@@ -78,6 +78,11 @@ Route::prefix('police')->group(function() {
 		'uses' => 'EmergencyController@policeEmergencyAccident',
 		'as' => 'police.emergency.accident'
 	]);
+
+	Route::post('/fir', [
+		'uses' => 'PoliceController@policeFir',
+		'as' => 'police.fir'
+	]);
 });
 
 
@@ -97,6 +102,10 @@ Route::prefix('api/android')->group(function(){
 
 	Route::post('/event/hep', [
 		'uses' => 'App\APIController@eventHEP'
+	]);
+
+	Route::post('/event/pf', [
+		'uses' => 'App\APIController@eventPF'
 	]);
 
 	Route::post('/event/hnb', [

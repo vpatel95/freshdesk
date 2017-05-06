@@ -42,3 +42,10 @@ Broadcast::channel('policeEmergencyAccident.{pId}', function($user, $pId) {
 	else
 		return false;
 });
+
+Broadcast::channel('policeFir.{pId}', function($user, $pId) {
+	if($user->role == 'police_station' && $user->id == $pId)
+		return true;
+	else
+		return false;
+});

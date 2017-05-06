@@ -16,16 +16,19 @@ class CreatePoliceFirsTable extends Migration
         Schema::create('police_firs', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('u_id');
+            $table->bigInteger('ps_id');
             $table->string('category');
             $table->text('description');
             $table->string('media');
             $table->string('latitude');
             $table->string('longitude');
+            $table->string('address');
             $table->timestamps();
         });
 
         Schema::table('police_firs', function(Blueprint $table) {
             $table->foreign('u_id')->references('id')->on('users');
+            $table->foreign('ps_id')->references('id')->on('police_stations');
         });
     }
 
