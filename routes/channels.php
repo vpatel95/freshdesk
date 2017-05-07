@@ -50,7 +50,7 @@ Broadcast::channel('policeFir.{pId}', function($user, $pId) {
 		return false;
 });
 
-Broadcast::channel('fireEmergency.{fId}', function($user, $pId) {
+Broadcast::channel('fireEmergency.{fId}', function($user, $fId) {
 	if($user->role == 'fire_station' && $user->id == $fId)
 		return true;
 	else

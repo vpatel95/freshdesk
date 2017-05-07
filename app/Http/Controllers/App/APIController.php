@@ -458,4 +458,12 @@ class APIController extends Controller {
             'SUCCESS' => 'AMBULANCE_FREED'
         ]);
     }
+
+    public function getnameFE() {
+        $name = UserDetail::find($request['user']);
+        return response()->json([
+            'user' => $name
+        ]);
+
+    }
 }

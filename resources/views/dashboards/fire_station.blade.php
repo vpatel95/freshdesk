@@ -49,10 +49,7 @@
                                 <li>
                                     <div class="gal_sort_list clearfix">
                                         <div class="meta name">Name</div>
-                                        <div class="meta category">Category</div>
-                                        <div class="meta description">Description</div>
                                         <div class="meta location">Location</div>
-                                        <div class="meta date">Date</div>
                                     </div>
                                 </li>
                                 <li class="gal_no_result">Sorry, there are no images to show.</li>
@@ -64,10 +61,7 @@
                                                 <span class="text-muted">User Id : </span>
                                             </div>
                                         </a>
-                                        <div class="meta category"></div>
-                                        <div class="meta description"></div>
-                                        <div class="meta location"></div>
-                                        <div class="meta date"></div>
+                                        <div class="meta location">{{ $fe->address }}</div>
                                     </li>
                                 @endforeach
                             </ul>
@@ -186,8 +180,19 @@
     <script src="{{ URL::to('js/pages/ebro_gallery.js') }}"></script>
 
     <script type="text/javascript">
-        $(document).load(function() {
-            $('#gal_toList').click();
-        });
+        Echo.private('fireEmergency.' + {{ $user->id }})
+            .listen('FireStation', (e) => {
+                console.log(e);
+                $.ajax({
+                    type:'POST',
+                    url:'{{ route('get.name') }}',
+                    data:{
+                        user:e.user
+                    },
+                    success:function(response) {
+                        $('#gallery_grid').append('<li class="mix user_0 travel business" data-name="Image 1" data-timestamp="1452898800"><a href="#"><div class="meta name"><h2 class="gal_title">' + response.name + '</h2><span class="text-muted">User Id : </span></div></a><div class="meta location">' + response.location +'</div></li>');
+                    }
+                })
+            });
     </script>
 @endpush
