@@ -1,21 +1,85 @@
 @extends('layouts.dashboard')
 
-@section('title','FreshDesk - Hospital')
+@section('title','FreshDesk - Police Station')
 
 @section('breadcrumbs')         
 <section id="breadcrumbs">
     <div class="container">
         <ul>
             <li><a href="#">FreshDesk</a></li>
-            <li><span>Fire Station Dashboard</span></li>                        
+            <li><span>Police Station Dashboard</span></li>                      
         </ul>
     </div>
 </section>
 @endsection
 
-@section('content')
-content
+@section('top_nav')
+<nav id="top_navigation">
+    <div class="container">
+        <ul id="icon_nav_h" class="top_ico_nav clearfix">
+            <li>
+                <a href="{{ route('home') }}">
+                    <i class="icon-home icon-2x"></i>
+                    <span class="menu_label">Home</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 @endsection
+
+@section('content')
+    <section class="container clearfix main_section">
+        <div id="main_content_outer" class="clearfix">
+            <div id="main_content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">First Information Reports</h4>
+                            </div>
+                            <nav class="panel_controls">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <span class="gal_lay_change lay_active" id="gal_toList"><i class="icon-align-justify"></i></span>
+                                    </div>
+                                </div>
+                            </nav>
+                            <ul id="gallery_grid" class="galMix list">
+                                <li>
+                                    <div class="gal_sort_list clearfix">
+                                        <div class="meta name">Name</div>
+                                        <div class="meta category">Category</div>
+                                        <div class="meta description">Description</div>
+                                        <div class="meta location">Location</div>
+                                        <div class="meta date">Date</div>
+                                    </div>
+                                </li>
+                                <li class="gal_no_result">Sorry, there are no images to show.</li>
+                                @foreach($data['fe'] as $fe)
+                                    <li class="mix user_0 travel business" data-name="Image 1" data-timestamp="1452898800">
+                                        <a href="#">
+                                            <div class="meta name">
+                                                <h2 class="gal_title">{{ App\UserDetail::find($fe->u_id)->name }}</h2>
+                                                <span class="text-muted">User Id : </span>
+                                            </div>
+                                        </a>
+                                        <div class="meta category"></div>
+                                        <div class="meta description"></div>
+                                        <div class="meta location"></div>
+                                        <div class="meta date"></div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="footer_space"></div>
+@endsection
+
 
 @section('side-nav')    
 <nav id="side_fixed_nav">
@@ -110,11 +174,20 @@ content
 </nav>
 @endsection
 
+@push('styles')
+    <link  rel="stylesheet" href="{{ URL::to('js/lib/multiple-select/multiple-select.css') }}">
+    <link rel="stylesheet" href="{{ URL::to('js/lib/magnific-popup/magnific-popup.css') }}">
+@endpush
+
 @push('scripts')
+    <script src="{{ URL::to('js/lib/mixitup/jquery.mixitup.min.js') }}"></script>
+    <script src="{{ URL::to('js/lib/multiple-select/jquery.multiple.select.js') }}"></script>
+    <script src="{{ URL::to('js/lib/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ URL::to('js/pages/ebro_gallery.js') }}"></script>
+
     <script type="text/javascript">
-        Echo.private(`user`)
-            .listen('UserLoggedIn', (e) => {
-                console.log(e);
-            });
+        $(document).load(function() {
+            $('#gal_toList').click();
+        });
     </script>
 @endpush

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use User;
 use UserDetail;
 use Hospital;
+use App\PoliceFir;
+use App\FireEmergency;
 use App\HospitalEmergencyAccident;
 use App\PoliceEmergencyAccident;
 use App\HospitalEmergencyNearBy;
@@ -37,6 +39,9 @@ class HomeController extends Controller {
             $data['hnb'] = HospitalEmergencyNearBy::all()->where('h_id', $user->id);
         } elseif ($user->role === 'police_station') {
             $data['pea'] = PoliceEmergencyAccident::all()->where('ps_id', $user->id);
+            $data['fir'] = PoliceFir::all()->where('ps_id', $user->id);
+        } elseif( $user->role === 'fire_station') {
+            $data['fe'] = FireEmergency::all()->where('f_id',$user->id);
         } else {
             $data = null;
         }

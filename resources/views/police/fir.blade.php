@@ -24,7 +24,7 @@
 				</a>
 			</li>
 			<li>             
-				<a href="{{ route('hospital.appointments') }}">
+				<a href="{{ route('police.firs') }}">
 					<i class="icon-group icon-2x"></i>
 					<span class="menu_label">Appointments</span>
 				</a>
@@ -52,58 +52,42 @@
 			<div id="main_content">
 				<div class="row">
 					<div class="col-sm-12">
-						<a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span> Print Appointment</a>
+						<a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span> Print Report</a>
 					</div>
 				</div>
 				<div class="row invoice_top">
 					<div class="col-sm-10">
-						<h2 class="heading_lg">Appointment #{{ $appointment->id.'/'.$appointment->u_id.'/'.$appointment->h_id }}</h2>
-						<h2 class="heading_lg_sub">Order  #16328</h2>
+						<h2 class="heading_lg">First Information Report #{{ $fir->id.'/'.$fir->u_id.'/'.$fir->ps_id }}</h2>
 						<p>Date: <span class="text-muted">12/11/2013</span></p>
 					</div>
 					<div class="col-sm-2">
 						<div id="invoice_qrcode"></div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<h3 class="heading_a">From</h3>
-						<address>
-							<p class="addres_name">{{ $hospital->name }}</p>
-							<p>{{ $hospital->address_line_1 }}</p>
-							<p>{{ $hospital->address_line_2 }}</p>
-							<p class="sepH_b">{{ $hospital->state }}</p>
-							<p><small><span class="text-muted">Phone:</span>{{ $hospital->contact }}</small></p>
-							<p><small><span class="text-muted">E-mail:</span> <a href="mailto:example.com">{{ App\User::find($hospital->id)->email }}</a></small></p>
-						</address>
-					</div>
-					<div class="col-sm-6">
-						<h3 class="heading_a">To</h3>
-						<address>
-							<p class="addres_name">{{ $user->name }}</p>
-							<p>{{ $user->address_line_1 }}</p>
-							<p>{{ $user->address_line_2 }}</p>
-							<p>{{ $user->state }}</p>
-						</address>
-					</div>
-				</div>
+
 				<div class="row">
 					<div class="col-sm-12">
 						<table class="table table-striped invoice_table">
 							<thead>
 								<tr>
 									<th>Name</th>
-									<th>Disease</th>
+									<th>Incident</th>
 									<th>Description</th>
-									<th>Date</th>
+									<th>Accused</th>
+									<th>Witness</th>
+									<th>Location</th>
+									<th>Date &amp; Time</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
 									<td>{{ $user->name }}</td>
-									<td>{{ $appointment->disease }}</td>
-									<td>{{ $appointment->description }}</td>
-									<td>{{ $appointment->appointment_date }}</td>
+									<td>{{ $fir->category }}</td>
+									<td>{{ $fir->description }}</td>
+									<td>{{ $fir->accused }}</td>
+									<td>{{ $fir->witness }}</td>
+									<td>{{ $fir->location }}</td>
+									<td>{{ $fir->date_time }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -111,7 +95,7 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="invoice_info">The appiointment is subjected to change according to the circumstances of the availability of the doctor without any prior information</div>
+						<div class="invoice_info">This is an automaticaly generated report. It does not require any signatures</div>
 					</div>
 				</div>
 			</div>

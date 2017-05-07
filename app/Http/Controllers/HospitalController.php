@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\PoliceStation;
+use App\Hospital;
+use App\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\HospitalEmergencyNearBy;
@@ -34,8 +36,11 @@ class HospitalController extends Controller {
 	}
 
 	public function getIndividualAppointment($id) {
-		return view('hospital.appointment', [
-			'appointment' => HospitalEmergencyNearBy::all()->where('h_id',Auth::user()->id)
+		return view('hospital.appointment',[
+			'appointment' => HospitalEmergencyNearBy::find($id),
+			'hospital' => Hospital::find(Auth::user()->id),
+			'user' => userDetail::find(HospitalEmergencyNearBy::find($id)->u_id)
+
 		]);
 	}
     

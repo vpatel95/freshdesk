@@ -1,13 +1,13 @@
 @extends('layouts.dashboard')
 
-@section('title','FreshDesk - Hospital')
+@section('title','FreshDesk - Police Station')
 
 @section('breadcrumbs')			
 <section id="breadcrumbs">
 	<div class="container">
 		<ul>
 			<li><a href="#">FreshDesk</a></li>
-			<li><span>Hospital Dashboard</span></li>						
+			<li><span>Police Station Dashboard</span></li>						
 		</ul>
 	</div>
 </section>
@@ -24,23 +24,17 @@
 				</a>
 			</li>
 			<li>             
-				<a href="{{ route('hospital.appointments') }}">
-					<i class="icon-group icon-2x"></i>
-					<span class="menu_label">Appointments</span>
-				</a>
-			</li>
-			<li>             
-				<a href="#">
-					<i class="icon-wrench icon-2x"></i>
-					<span class="menu_label">Emergency Accident</span>
-				</a>
-			</li>
-			<li>             
-				<a href="#">
-					<i class="icon-wrench icon-2x"></i>
-					<span class="menu_label">Emergency Personal</span>
-				</a>
-			</li>
+                <a href="">
+                    <i class="icon-group icon-2x"></i>
+                    <span class="menu_label">Emergency Accidents</span>
+                </a>
+            </li>
+            <li>             
+                <a href="#">
+                    <i class="icon-wrench icon-2x"></i>
+                    <span class="menu_label">FIR</span>
+                </a>
+            </li>
 		</ul>
 	</div>
 </nav>
@@ -52,66 +46,44 @@
 			<div id="main_content">
 				<div class="row">
 					<div class="col-sm-12">
-						<a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span> Print Appointment</a>
-					</div>
-				</div>
-				<div class="row invoice_top">
-					<div class="col-sm-10">
-						<h2 class="heading_lg">Appointment #{{ $appointment->id.'/'.$appointment->u_id.'/'.$appointment->h_id }}</h2>
-						<h2 class="heading_lg_sub">Order  #16328</h2>
-						<p>Date: <span class="text-muted">12/11/2013</span></p>
-					</div>
-					<div class="col-sm-2">
-						<div id="invoice_qrcode"></div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<h3 class="heading_a">From</h3>
-						<address>
-							<p class="addres_name">{{ $hospital->name }}</p>
-							<p>{{ $hospital->address_line_1 }}</p>
-							<p>{{ $hospital->address_line_2 }}</p>
-							<p class="sepH_b">{{ $hospital->state }}</p>
-							<p><small><span class="text-muted">Phone:</span>{{ $hospital->contact }}</small></p>
-							<p><small><span class="text-muted">E-mail:</span> <a href="mailto:example.com">{{ App\User::find($hospital->id)->email }}</a></small></p>
-						</address>
-					</div>
-					<div class="col-sm-6">
-						<h3 class="heading_a">To</h3>
-						<address>
-							<p class="addres_name">{{ $user->name }}</p>
-							<p>{{ $user->address_line_1 }}</p>
-							<p>{{ $user->address_line_2 }}</p>
-							<p>{{ $user->state }}</p>
-						</address>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12">
-						<table class="table table-striped invoice_table">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Disease</th>
-									<th>Description</th>
-									<th>Date</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>{{ $user->name }}</td>
-									<td>{{ $appointment->disease }}</td>
-									<td>{{ $appointment->description }}</td>
-									<td>{{ $appointment->appointment_date }}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="invoice_info">The appiointment is subjected to change according to the circumstances of the availability of the doctor without any prior information</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">First Information Reports</h4>
+							</div>
+							<nav class="panel_controls">
+								<div class="row">
+									<div class="col-sm-4">
+										<span class="gal_lay_change lay_active" id="gal_toList"><i class="icon-align-justify"></i></span>
+									</div>
+								</div>
+							</nav>
+							<ul id="gallery_grid" class="galMix list">
+								<li>
+									<div class="gal_sort_list clearfix">
+										<div class="meta name">Name</div>
+										<div class="meta category">Category</div>
+										<div class="meta description">Description</div>
+										<div class="meta location">Location</div>
+										<div class="meta date">Date</div>
+									</div>
+								</li>
+								<li class="gal_no_result">Sorry, there are no images to show.</li>
+								@foreach($fir as $f)
+									<li class="mix user_0 travel business" data-name="Image 1" data-timestamp="1452898800">
+										<a href="{{ route('police.fir', $f->id) }}">
+											<div class="meta name">
+												<h2 class="gal_title">{{ App\UserDetail::find($f->u_id)->name }}</h2>
+												<span class="text-muted">User Id : {{ $f->u_id }}</span>
+											</div>
+										</a>
+										<div class="meta category">{{ $f->category }}</div>
+										<div class="meta description">{{ $f->description }}</div>
+										<div class="meta location">{{ $f->location }}</div>
+										<div class="meta date">{{ $f->date_time }}</div>
+									</li>
+								@endforeach
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

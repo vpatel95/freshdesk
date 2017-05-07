@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title','FreshDesk - Hospital')
+@section('title','FreshDesk - Police Station')
 
 @section('breadcrumbs')         
 <section id="breadcrumbs">
@@ -24,27 +24,15 @@
                 </a>
             </li>
             <li>             
-                <a href="{{ route('hospital.appointments') }}">
+                <a href="">
                     <i class="icon-group icon-2x"></i>
-                    <span class="menu_label">Appointment Report</span>
+                    <span class="menu_label">Emergency Accidents</span>
                 </a>
             </li>
             <li>             
-                <a href="#">
+                <a href="{{ route('police.firs') }}">
                     <i class="icon-wrench icon-2x"></i>
-                    <span class="menu_label">Emergency Accident</span>
-                </a>
-            </li>
-            <li>             
-                <a href="#">
-                    <i class="icon-wrench icon-2x"></i>
-                    <span class="menu_label">Emergency Personal</span>
-                </a>
-            </li>
-            <li>             
-                <a href="#">
-                    <i class="icon-wrench icon-2x"></i>
-                    <span class="menu_label">Settings</span>
+                    <span class="menu_label">FIR</span>
                 </a>
             </li>
         </ul>
@@ -124,18 +112,22 @@
                         <div class="dd_content">
                             <table class="table">
                                 <tbody id="fir">
-                                    
+                                    @foreach($data['fir'] as $fir)
                                         <tr>
                                             <td>
                                                 <strong>
-                                                    <a href="#">Name</a>
-                                                </strong>
-                                                <p>Disease : disease</p>
-                                                <p>Appointment Date : app date</p>
+                                                    <a href="#">{{ App\UserDetail::find($fir->u_id)->name }}</a>
+                                                </strong><br><br>
+                                                <p><b>Category</b> : {{ $fir->category }}<br>
+                                                <b>Description</b> : {{ $fir->description }}<br>
+                                                <b>Accused</b> : {{ $fir->accused }}<br>
+                                                <b>Witness</b> : {{ $fir->witness }}<br>
+                                                <b>Location</b> : {{ $fir->location }}<br>
+                                                <b>Date &amp; Time</b> : {{ $fir->date_time }}<br></p>
                                             </td>
-                                            <td><span class="label label-info">23 Nov</span></td>
+                                            <td><span class="label label-info">{{ $fir->category }}</span></td>
                                         </tr>
-
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -271,7 +263,7 @@
                 console.log(e);
                 $.ajax({
                     type : 'POST',
-                    url : '{{ route('police.fir') }}',
+                    url : '{{ route('police.first') }}',
                     data : {
                         address : address,
                         u_id : user,

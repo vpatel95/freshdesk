@@ -79,10 +79,21 @@ Route::prefix('police')->group(function() {
 		'as' => 'police.emergency.accident'
 	]);
 
-	Route::post('/fir', [
-		'uses' => 'PoliceController@policeFir',
+	Route::get('/fir/{id}', [
+		'uses' => 'PoliceController@getIndividualFir',
 		'as' => 'police.fir'
 	]);
+
+	Route::post('/first', [
+		'uses' => 'PoliceController@policeFir',
+		'as' => 'police.first'
+	]);
+
+	Route::get('/fir', [
+		'uses' => 'PoliceController@getFirView',
+		'as' => 'police.firs'
+	]);
+
 });
 
 Route::prefix('api/android')->group(function(){

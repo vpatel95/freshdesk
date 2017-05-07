@@ -9,7 +9,7 @@
 
     </head>
 
-    <body class=" sidebar_hidden side_fixed">
+    <body class=" sidebar_hidden">
         @include('includes.common.header')
         @yield('breadcrumbs')
 
