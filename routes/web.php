@@ -43,6 +43,11 @@ Route::post('/logout', [
 	'as' => 'logout'
 ]);
 
+Route::post('/getname', [
+	'uses' => 'App\APIController@getnameFE',
+	'as' => 'get.name'
+]);
+
 Route::prefix('hospital')->group(function(){
 
 	Route::get('/appointment', [
